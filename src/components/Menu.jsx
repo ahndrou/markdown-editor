@@ -63,7 +63,7 @@ export default function Menu({
       <h2 className="text-500 text-heading-s w-max uppercase">My Documents</h2>
 
       <button
-        className="bg-orange hover:bg-orange-hover text-heading-m w-max cursor-pointer rounded-sm px-12 py-3"
+        className="bg-orange hover:bg-orange-hover text-heading-m w-max cursor-pointer rounded-lg px-12 py-3"
         onClick={addNewDocument}
       >
         + New Document

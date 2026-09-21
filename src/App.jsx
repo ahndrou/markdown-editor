@@ -13,7 +13,7 @@ import {
 } from "./utils/localStorageUtils";
 
 function App() {
-  const [currentFileIndex, setCurrentFileIndex] = useState(1);
+  const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [markdown, setMarkdown] = useState(
     getMarkdownFile(currentFileIndex).content,
   );

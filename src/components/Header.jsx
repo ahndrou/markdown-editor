@@ -87,7 +87,7 @@ export default function Header({
       />
 
       <button
-        className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2`}
+        className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
         onClick={() => {
           updateCurrentFileContent(currentFileIndex, markdown);
           toast(`${fileName} saved successfully.`);
