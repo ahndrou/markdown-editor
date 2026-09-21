@@ -31,9 +31,11 @@ export default function Menu({
     />
   ));
 
+  const NEW_DOC_BASE_NAME = "document"
+
   function addNewDocument() {
     let newFileNum = 1;
-    let newFileName = "untitled-document.md";
+    let newFileName = `${NEW_DOC_BASE_NAME}.md`
 
     while (true) {
       let fileAlreadyExists = fileItems.reduce(
@@ -42,7 +44,7 @@ export default function Menu({
       );
 
       if (fileAlreadyExists) {
-        newFileName = `untitled-document${newFileNum}.md`;
+        newFileName = `${NEW_DOC_BASE_NAME}${newFileNum}.md`;
         newFileNum++;
       } else {
         break;
