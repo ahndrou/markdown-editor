@@ -27,7 +27,7 @@ export default function Header({
   // The text input isn't a controlled component. Thus it visibly changes without React's state management.
   // We need the most recent file name to display in the toast.
   //TODO Maybe just make this into state and make the text input controlled?
-  let fileName = getMarkdownFile(currentFileIndex).name;
+  let fileName = getMarkdownFile(currentFileIndex)?.name ?? "No file!";
 
   const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row}`;
 

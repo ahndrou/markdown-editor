@@ -15,11 +15,11 @@ import {
 function App() {
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [markdown, setMarkdown] = useState(
-    getMarkdownFile(currentFileIndex).content,
+    getMarkdownFile(currentFileIndex)?.content ?? null,
   );
 
   useEffect(() => {
-    setMarkdown(getMarkdownFile(currentFileIndex).content);
+    setMarkdown(getMarkdownFile(currentFileIndex)?.content ?? null);
   }, [currentFileIndex]);
 
   const [menuOpen, setMenuOpen] = useState(false);
