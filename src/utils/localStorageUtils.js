@@ -1,6 +1,6 @@
 import { getCurrentDate } from "@/utils/generalUtils";
 
-import defaultMarkdown from "../data.json";
+import defaultMarkdown from "../initial-data.json";
 
 const storageUpdatedEvent = new Event("storageUpdated");
 
@@ -16,7 +16,7 @@ export function saveToLocalStorage(key, value) {
 export function retrieveFromLocalStorage(key) {
   try {
     const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : undefined;
+    return item ? JSON.parse(item) : null;
   } catch (error) {
     console.log(error);
   }
