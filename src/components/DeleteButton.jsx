@@ -17,7 +17,7 @@ export default function DeleteButton({
   setCurrentFileIndex,
 }) {
   function deleteCurrentFile() {
-    if (currentFileIndex > 0) {
+    if (currentFileIndex >= 0) {
       deleteFileFromStorage(currentFileIndex);
       setCurrentFileIndex((oldIndex) => (oldIndex === 0 ? 0 : oldIndex - 1));
       toast(`${currentFileName} deleted.`);

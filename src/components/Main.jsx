@@ -14,19 +14,25 @@ export default function Main({
     <main
       className={`${gridClasses} grid w-full grid-cols-[1fr_2rem_1fr_2rem]`}
     >
-      <PreviewToggle
-        fullWidthPreview={fullWidthPreview}
-        setPreviewVisible={setFullWidthPreview}
-        className="col-start-4"
-      />
+      {markdown !== null ? (
+        <>
+          <PreviewToggle
+            fullWidthPreview={fullWidthPreview}
+            setPreviewVisible={setFullWidthPreview}
+            className="col-start-4"
+          />
 
-      <ContentViewGroup
-        key={currentFileIndex}
-        fullWidthPreview={fullWidthPreview}
-        fileIndex={currentFileIndex}
-        markdown={markdown}
-        setMarkdown={setMarkdown}
-      />
+          <ContentViewGroup
+            key={currentFileIndex}
+            fullWidthPreview={fullWidthPreview}
+            fileIndex={currentFileIndex}
+            markdown={markdown}
+            setMarkdown={setMarkdown}
+          />
+        </>
+      ) : (
+        <span>Empty</span>
+      )}
     </main>
   );
 }
