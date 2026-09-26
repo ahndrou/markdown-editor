@@ -2,27 +2,21 @@ import FileListItem from "./FileListItem";
 import logo from "../assets/logo.svg";
 import ThemeSwitch from "./ui/ThemeSwitch";
 
-import {
-  addFileToStorage,
-  getAllStoredFileMetaData,
-} from "@/utils/localStorageUtils.js";
-import { useState } from "react";
-
 export default function Menu({
   visible,
   theme,
   setCurrentFileIndex,
   currentFileIndex,
+  fileMetaData,
   switchTheme,
   saveFile,
   gridPosition,
+  addNewDocument,
 }) {
-  const [fileItems, _] = useState(() => getAllStoredFileMetaData());
-
   const visibleClasses = visible ? "w-65 px-6" : "w-0 px-0";
   const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row} row-span-2`;
 
-  const fileListItems = fileItems.map((mdObj, index) => (
+  const fileListItems = fileMetaData.map((mdObj, index) => (
     <FileListItem
       key={mdObj.name}
       creationDate={mdObj.createdAt}
@@ -33,29 +27,6 @@ export default function Menu({
       index={index}
     />
   ));
-
-  const NEW_DOC_BASE_NAME = "document";
-
-  function addNewDocument() {
-    let newFileNum = 1;
-    let newFileName = `${NEW_DOC_BASE_NAME}.md`;
-
-    while (true) {
-      let fileAlreadyExists = fileItems.reduce(
-        (accumulator, file) => accumulator || file.name == newFileName,
-        false,
-      );
-
-      if (fileAlreadyExists) {
-        newFileName = `${NEW_DOC_BASE_NAME}${newFileNum}.md`;
-        newFileNum++;
-      } else {
-        break;
-      }
-    }
-
-    addFileToStorage(newFileName);
-  }
 
   return (
     <nav

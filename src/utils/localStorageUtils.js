@@ -2,12 +2,9 @@ import { getCurrentDate } from "@/utils/generalUtils";
 
 import defaultMarkdown from "../initial-data.json";
 
-const storageUpdatedEvent = new Event("storageUpdated");
-
 export function saveToLocalStorage(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-    dispatchEvent(storageUpdatedEvent);
   } catch (error) {
     console.log(error);
   }
@@ -82,17 +79,4 @@ export function getAllStoredFileMetaData() {
   }
 
   return metaData;
-}
-
-/**
- * Derives an array of meta-data objects for the MD files stored in localStorage.
- *
- * @returns An array of objects containing meta-data for files stored files.
- */
-export function deriveFileMetaDataList() {
-  const db = retrieveFromLocalStorage("markdownDb");
-
-  return db.map((file) => {
-    return { name: file.name, createdAt: file.createdAt };
-  });
 }
