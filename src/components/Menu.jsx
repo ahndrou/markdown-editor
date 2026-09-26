@@ -2,8 +2,11 @@ import FileListItem from "./FileListItem";
 import logo from "../assets/logo.svg";
 import ThemeSwitch from "./ui/ThemeSwitch";
 
-import { addFileToStorage } from "@/utils/localStorageUtils.js";
-import useFileItems from "@/hooks/useFileItems";
+import {
+  addFileToStorage,
+  getAllStoredFileMetaData,
+} from "@/utils/localStorageUtils.js";
+import { useState } from "react";
 
 export default function Menu({
   visible,
@@ -14,7 +17,7 @@ export default function Menu({
   saveFile,
   gridPosition,
 }) {
-  const [fileItems, _] = useFileItems();
+  const [fileItems, _] = useState(() => getAllStoredFileMetaData());
 
   const visibleClasses = visible ? "w-65 px-6" : "w-0 px-0";
   const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row} row-span-2`;

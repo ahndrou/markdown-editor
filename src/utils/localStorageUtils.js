@@ -16,14 +16,15 @@ export function saveToLocalStorage(key, value) {
 export function retrieveFromLocalStorage(key) {
   try {
     const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
+
+    return JSON.parse(item);
   } catch (error) {
     console.log(error);
   }
 }
 
 export function getMarkdownFile(index) {
-  return retrieveFromLocalStorage("markdownDb")[index];
+  return retrieveFromLocalStorage(index);
 }
 
 export function addFileToStorage(fileName) {
@@ -57,7 +58,41 @@ export function updateCurrentFileName(index, name) {
 }
 
 export function initLocalStorage() {
-  if (!localStorage.getItem("markdownDb")) {
-    localStorage.setItem("markdownDb", JSON.stringify(defaultMarkdown));
+  localStorage.setItem("DB:welcome.md", JSON.stringify(defaultMarkdown));
+}
+
+export function isStorageInitialized() {
+  return Object.keys(localStorage).some((key) => key.startsWith("DB:"));
+}
+
+export function getFirstDBKey() {
+  return Object.keys(localStorage).find((key) => key.startsWith("DB:"));
+}
+
+export function getAllStoredFileMetaData() {
+  const metaData = [];
+
+  for (const entry in localStorage) {
+    if (entry.startsWith("DB:")) {
+      metaData.push({
+        name: entry,
+        createdDate: localStorage[entry].createdAt,
+      });
+    }
   }
+
+  return metaData;
+}
+
+/**
+ * Derives an array of meta-data objects for the MD files stored in localStorage.
+ *
+ * @returns An array of objects containing meta-data for files stored files.
+ */
+export function deriveFileMetaDataList() {
+  const db = retrieveFromLocalStorage("markdownDb");
+
+  return db.map((file) => {
+    return { name: file.name, createdAt: file.createdAt };
+  });
 }

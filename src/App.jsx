@@ -8,12 +8,15 @@ import { Toaster } from "./components/ui/sonner";
 import ChangeTracker from "./components/ChangeTracker";
 
 import {
+  getFirstDBKey,
   getMarkdownFile,
   updateCurrentFileContent,
 } from "./utils/localStorageUtils";
 
 function App() {
-  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [currentFileIndex, setCurrentFileIndex] = useState(() =>
+    getFirstDBKey(),
+  );
   const [markdown, setMarkdown] = useState(
     getMarkdownFile(currentFileIndex)?.content ?? null,
   );
