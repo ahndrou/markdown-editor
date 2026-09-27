@@ -72,7 +72,7 @@ export function getAllStoredFileMetaData() {
     if (entry.startsWith("DB:")) {
       metaData.push({
         name: entry,
-        createdDate: localStorage[entry].createdAt,
+        createdAt: JSON.parse(localStorage.getItem(entry)).createdAt,
       });
     }
   }

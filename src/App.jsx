@@ -63,7 +63,7 @@ function App() {
 
     setFileMetaData((state) => [
       ...state,
-      { name: newFileName, createdDate: createdAtDate },
+      { name: newFileName, createdAt: createdAtDate },
     ]);
 
     const document = {
