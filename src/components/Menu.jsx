@@ -70,7 +70,10 @@ export default function Menu({
         switchTheme={switchTheme}
       />
 
-      <Dialog open={pendingFileChange !== null} onOpenChange={(open) => !open}>
+      <Dialog
+        open={pendingFileChange !== null}
+        onOpenChange={(open) => !open && setPendingFileChange(null)}
+      >
         <DialogContent className="font-roboto-slab">
           <DialogTitle className="mb-4">
             Document has unsaved changes.
@@ -81,9 +84,9 @@ export default function Menu({
             you will lose your changes!
           </DialogDescription>
 
-          <ol>
-            <li>
-              <DialogClose asChild>
+          <DialogClose asChild>
+            <ol>
+              <li>
                 <button
                   className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                   onClick={() => {
@@ -94,10 +97,8 @@ export default function Menu({
                 >
                   Save & Continue
                 </button>
-              </DialogClose>
-            </li>
-            <li>
-              <DialogClose asChild>
+              </li>
+              <li>
                 <button
                   className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                   onClick={() => {
@@ -107,9 +108,9 @@ export default function Menu({
                 >
                   Continue and Lose Changes
                 </button>
-              </DialogClose>
-            </li>
-          </ol>
+              </li>
+            </ol>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </nav>
