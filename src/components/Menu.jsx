@@ -84,33 +84,31 @@ export default function Menu({
             you will lose your changes!
           </DialogDescription>
 
-          <DialogClose asChild>
-            <ol>
-              <li>
-                <button
-                  className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
-                  onClick={() => {
-                    saveCurrentMarkdown();
-                    setCurrentFileIndex(pendingFileChange);
-                    setPendingFileChange(null);
-                  }}
-                >
-                  Save & Continue
-                </button>
-              </li>
-              <li>
-                <button
-                  className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
-                  onClick={() => {
-                    setCurrentFileIndex(pendingFileChange);
-                    setPendingFileChange(null);
-                  }}
-                >
-                  Continue and Lose Changes
-                </button>
-              </li>
-            </ol>
-          </DialogClose>
+          <ol>
+            <li>
+              <button
+                className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
+                onClick={() => {
+                  saveCurrentMarkdown();
+                  setCurrentFileIndex(pendingFileChange);
+                  setPendingFileChange(null);
+                }}
+              >
+                Save & Continue
+              </button>
+            </li>
+            <li>
+              <button
+                className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
+                onClick={() => {
+                  setCurrentFileIndex(pendingFileChange);
+                  setPendingFileChange(null);
+                }}
+              >
+                Continue and Lose Changes
+              </button>
+            </li>
+          </ol>
         </DialogContent>
       </Dialog>
     </nav>
