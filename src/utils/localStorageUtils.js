@@ -13,7 +13,6 @@ export function saveToLocalStorage(key, value) {
 export function retrieveFromLocalStorage(key) {
   try {
     const item = localStorage.getItem(key);
-
     return JSON.parse(item);
   } catch (error) {
     console.log(error);

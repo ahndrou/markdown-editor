@@ -11,7 +11,6 @@ import {
   getAllStoredFileMetaData,
   getFirstDBKey,
   getMarkdownFile,
-  updateCurrentFileContent,
 } from "./utils/localStorageUtils";
 import { getCurrentDate } from "./utils/generalUtils";
 
@@ -21,23 +20,21 @@ function App() {
   );
 
   const [markdown, setMarkdown] = useState(
-    getMarkdownFile(currentFileIndex)?.content ?? null,
+    () => getMarkdownFile(currentFileIndex).content,
   );
 
   const [fileMetaData, setFileMetaData] = useState(() =>
     getAllStoredFileMetaData(),
   );
 
-  const NEW_DOC_BASE_NAME = "DB:document";
-
   function addNewDocument() {
+    const NEW_DOC_BASE_NAME = "DB:document";
     let newFileNum = 1;
     let newFileName = `${NEW_DOC_BASE_NAME}.md`;
 
     while (true) {
-      let fileAlreadyExists = fileMetaData.reduce(
-        (accumulator, file) => accumulator || file.name == newFileName,
-        false,
+      let fileAlreadyExists = fileMetaData.some(
+        (file) => file.name === newFileName,
       );
 
       if (fileAlreadyExists) {
@@ -60,11 +57,17 @@ function App() {
       content: "# New file.",
     };
 
-    localStorage.setItem(newFileName, document);
+    localStorage.setItem(newFileName, JSON.stringify(document));
+  }
+
+  function saveCurrentMarkdown() {
+    const item = JSON.parse(localStorage.getItem(currentFileIndex));
+    item.content = markdown;
+    localStorage.setItem(currentFileIndex, JSON.stringify(item));
   }
 
   useEffect(() => {
-    setMarkdown(getMarkdownFile(currentFileIndex)?.content ?? null);
+    setMarkdown(JSON.parse(localStorage.getItem(currentFileIndex)).content);
   }, [currentFileIndex]);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -77,7 +80,7 @@ function App() {
   }
 
   function saveFile() {
-    updateCurrentFileContent(currentFileIndex, markdown);
+    localStorage.setItem(currentFileIndex, JSON.stringify(markdown));
   }
 
   return (
@@ -104,6 +107,7 @@ function App() {
           switchTheme={switchTheme}
           saveFile={saveFile}
           addNewDocument={addNewDocument}
+          saveCurrentMarkdown={saveCurrentMarkdown}
           gridPosition={{ row: 1, col: 1 }}
         />
 
