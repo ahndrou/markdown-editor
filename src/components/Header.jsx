@@ -5,11 +5,7 @@ import logo from "../assets/logo.svg";
 import saveImg from "../assets/icon-save.svg";
 import { toast } from "sonner";
 
-import {
-  getMarkdownFile,
-  updateCurrentFileContent,
-  updateCurrentFileName,
-} from "../utils/localStorageUtils.js";
+import { updateCurrentFileContent } from "../utils/localStorageUtils.js";
 
 import DeleteButton from "./DeleteButton";
 
@@ -17,27 +13,13 @@ export default function Header({
   setMenuOpen,
   setCurrentFileIndex,
   setMarkdown,
+  renameCurrentMarkdown,
   currentFileIndex,
   menuOpen,
   markdown,
   gridPosition,
 }) {
-  // Haven't used state because it can be derived from index.
-  // Does mean we have to remember to update it manually from doc. name onBlur though.
-  // The text input isn't a controlled component. Thus it visibly changes without React's state management.
-  // We need the most recent file name to display in the toast.
-  //TODO Maybe just make this into state and make the text input controlled?
-  let fileName = "PLACEHOLDER";
-
   const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row}`;
-
-  function handleRename(e) {
-    if (fileName !== e.target.value) {
-      updateCurrentFileName(currentFileIndex, e.target.value);
-      toast(`${fileName} renamed to ${e.target.value}.`);
-      fileName = e.target.value;
-    }
-  }
 
   return (
     <header
@@ -73,9 +55,13 @@ export default function Header({
           id="docName"
           type="text"
           className="text-heading-m caret-orange min-w-0 border-b-1 border-transparent overflow-ellipsis focus:border-100 focus:outline-0"
-          defaultValue={fileName}
-          key={fileName} // Ensures the input updates when the markdown file changes.
-          onBlur={handleRename}
+          defaultValue={currentFileIndex}
+          key={currentFileIndex} // Ensures the input updates when the markdown file changes.
+          onBlur={(e) => {
+            if (!renameCurrentMarkdown(e.target.value)) {
+              e.target.value = currentFileIndex;
+            }
+          }}
         />
       </div>
 
@@ -83,7 +69,7 @@ export default function Header({
         setCurrentFileIndex={setCurrentFileIndex}
         setMarkdown={setMarkdown}
         currentFileIndex={currentFileIndex}
-        currentFileName={fileName}
+        currentFileName={currentFileIndex}
       />
 
       <button

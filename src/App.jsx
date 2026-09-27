@@ -12,6 +12,7 @@ import {
   getMarkdownFile,
 } from "./utils/localStorageUtils";
 import { getCurrentDate } from "./utils/generalUtils";
+import { toast } from "sonner";
 
 function App() {
   const [currentFileIndex, setCurrentFileIndex] = useState(() =>
@@ -79,6 +80,28 @@ function App() {
     localStorage.setItem(currentFileIndex, JSON.stringify(item));
   }
 
+  function renameCurrentMarkdown(newName) {
+    if (!newName || newName === currentFileIndex) return false;
+
+    if (fileMetaData.some((file) => file.name === newName)) {
+      toast(`${newName} already exists.`);
+      return false;
+    }
+
+    const item = localStorage.getItem(currentFileIndex);
+    localStorage.setItem(newName, item);
+    localStorage.removeItem(currentFileIndex);
+
+    setFileMetaData((state) =>
+      state.map((file) =>
+        file.name === currentFileIndex ? { ...file, name: newName } : file,
+      ),
+    );
+    setCurrentFileIndex(newName);
+    toast(`${currentFileIndex} renamed to ${newName}.`);
+    return true;
+  }
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullWidthPreview, setFullWidthPreview] = useState(false);
 
@@ -97,6 +120,7 @@ function App() {
         setMenuOpen={setMenuOpen}
         setCurrentFileIndex={setCurrentFileIndex}
         currentFileIndex={currentFileIndex}
+        renameCurrentMarkdown={renameCurrentMarkdown}
         menuOpen={menuOpen}
         markdown={markdown}
         gridPosition={{ row: 1, col: 2 }}
