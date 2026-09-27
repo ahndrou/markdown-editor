@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useStoredState from "./hooks/useStoredState";
 
 import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
-import ChangeTracker from "./components/ChangeTracker";
 
 import {
   getAllStoredFileMetaData,
@@ -19,6 +18,11 @@ function App() {
     getFirstDBKey(),
   );
 
+  useEffect(() => {
+    setMarkdown(JSON.parse(localStorage.getItem(currentFileIndex)).content);
+    contentModified.current = false;
+  }, [currentFileIndex]);
+
   const [markdown, setMarkdown] = useState(
     () => getMarkdownFile(currentFileIndex).content,
   );
@@ -26,6 +30,15 @@ function App() {
   const [fileMetaData, setFileMetaData] = useState(() =>
     getAllStoredFileMetaData(),
   );
+
+  const contentModified = useRef(false);
+
+  function modifyDocumentContent(newContent) {
+    if (newContent !== markdown) {
+      contentModified.current = true;
+    }
+    setMarkdown(newContent);
+  }
 
   function addNewDocument() {
     const NEW_DOC_BASE_NAME = "DB:document";
@@ -66,10 +79,6 @@ function App() {
     localStorage.setItem(currentFileIndex, JSON.stringify(item));
   }
 
-  useEffect(() => {
-    setMarkdown(JSON.parse(localStorage.getItem(currentFileIndex)).content);
-  }, [currentFileIndex]);
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullWidthPreview, setFullWidthPreview] = useState(false);
 
@@ -79,50 +88,43 @@ function App() {
     setTheme((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
   }
 
-  function saveFile() {
-    localStorage.setItem(currentFileIndex, JSON.stringify(markdown));
-  }
-
   return (
-    <ChangeTracker currentFileIndex={currentFileIndex}>
-      <div
-        className={`${theme} relative grid min-h-screen grid-cols-[auto_1fr] grid-rows-[4rem]`}
-        id="app-container"
-      >
-        <Header
-          setMenuOpen={setMenuOpen}
-          setCurrentFileIndex={setCurrentFileIndex}
-          currentFileIndex={currentFileIndex}
-          menuOpen={menuOpen}
-          markdown={markdown}
-          gridPosition={{ row: 1, col: 2 }}
-        />
+    <div
+      className={`${theme} relative grid min-h-screen grid-cols-[auto_1fr] grid-rows-[4rem]`}
+      id="app-container"
+    >
+      <Header
+        setMenuOpen={setMenuOpen}
+        setCurrentFileIndex={setCurrentFileIndex}
+        currentFileIndex={currentFileIndex}
+        menuOpen={menuOpen}
+        markdown={markdown}
+        gridPosition={{ row: 1, col: 2 }}
+      />
 
-        <Menu
-          visible={menuOpen}
-          theme={theme}
-          setCurrentFileIndex={setCurrentFileIndex}
-          currentFileIndex={currentFileIndex}
-          fileMetaData={fileMetaData}
-          switchTheme={switchTheme}
-          saveFile={saveFile}
-          addNewDocument={addNewDocument}
-          saveCurrentMarkdown={saveCurrentMarkdown}
-          gridPosition={{ row: 1, col: 1 }}
-        />
+      <Menu
+        visible={menuOpen}
+        theme={theme}
+        switchTheme={switchTheme}
+        setCurrentFileIndex={setCurrentFileIndex}
+        fileMetaData={fileMetaData}
+        contentModified={contentModified}
+        addNewDocument={addNewDocument}
+        saveCurrentMarkdown={saveCurrentMarkdown}
+        gridPosition={{ row: 1, col: 1 }}
+      />
 
-        <Main
-          fullWidthPreview={fullWidthPreview}
-          setFullWidthPreview={setFullWidthPreview}
-          currentFileIndex={currentFileIndex}
-          markdown={markdown}
-          setMarkdown={setMarkdown}
-          gridPosition={{ row: 2, col: 2 }}
-        />
+      <Main
+        fullWidthPreview={fullWidthPreview}
+        setFullWidthPreview={setFullWidthPreview}
+        currentFileIndex={currentFileIndex}
+        markdown={markdown}
+        setMarkdown={modifyDocumentContent}
+        gridPosition={{ row: 2, col: 2 }}
+      />
 
-        <Toaster position="bottom-right" />
-      </div>
-    </ChangeTracker>
+      <Toaster position="bottom-right" />
+    </div>
   );
 }
 

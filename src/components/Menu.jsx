@@ -20,10 +20,9 @@ export default function Menu({
   gridPosition,
   addNewDocument,
   saveCurrentMarkdown,
+  contentModified,
 }) {
   const [pendingFileChange, setPendingFileChange] = useState(null);
-
-  const unsavedChanges = true;
 
   // Uses these rather than display: none so a transition is seen.
   const visibleClasses = visible ? "w-65 px-6" : "w-0 px-0";
@@ -50,7 +49,7 @@ export default function Menu({
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
-                if (unsavedChanges) setPendingFileChange(mdObj.name);
+                if (contentModified.current) setPendingFileChange(mdObj.name);
                 else setCurrentFileIndex(mdObj.name);
               }}
             >
