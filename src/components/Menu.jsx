@@ -4,7 +4,6 @@ import fileIcon from "../assets/icon-document.svg";
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -43,7 +42,7 @@ export default function Menu({
         + New Document
       </button>
 
-      <ul className="w-max">
+      <ul className="grid w-max gap-2">
         {fileMetaData.map((mdObj) => (
           <li>
             <button
