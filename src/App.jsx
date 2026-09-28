@@ -15,19 +15,17 @@ import { getCurrentDate } from "./utils/generalUtils";
 import { toast } from "sonner";
 
 function App() {
-  const [currentFileIndex, setCurrentFileIndex] = useState(() =>
-    getFirstDBKey(),
-  );
+  const [currentFileName, setcurrentFileName] = useState(() => getFirstDBKey());
 
   useEffect(() => {
     setMarkdown(
-      JSON.parse(localStorage.getItem(currentFileIndex))?.content ?? null,
+      JSON.parse(localStorage.getItem(currentFileName))?.content ?? null,
     );
     contentModified.current = false;
-  }, [currentFileIndex]);
+  }, [currentFileName]);
 
   const [markdown, setMarkdown] = useState(
-    () => getMarkdownFile(currentFileIndex).content,
+    () => getMarkdownFile(currentFileName).content,
   );
 
   const [fileMetaData, setFileMetaData] = useState(() =>
@@ -77,46 +75,46 @@ function App() {
   }
 
   function saveCurrentMarkdown() {
-    const item = JSON.parse(localStorage.getItem(currentFileIndex));
+    const item = JSON.parse(localStorage.getItem(currentFileName));
     item.content = markdown;
-    localStorage.setItem(currentFileIndex, JSON.stringify(item));
+    localStorage.setItem(currentFileName, JSON.stringify(item));
   }
 
   function renameCurrentMarkdown(newName) {
-    if (!newName || newName === currentFileIndex) return false;
+    if (!newName || newName === currentFileName) return false;
 
     if (fileMetaData.some((file) => file.name === newName)) {
       toast(`${newName} already exists.`);
       return false;
     }
 
-    const item = localStorage.getItem(currentFileIndex);
+    const item = localStorage.getItem(currentFileName);
     localStorage.setItem(newName, item);
-    localStorage.removeItem(currentFileIndex);
+    localStorage.removeItem(currentFileName);
 
     setFileMetaData((state) =>
       state.map((file) =>
-        file.name === currentFileIndex ? { ...file, name: newName } : file,
+        file.name === currentFileName ? { ...file, name: newName } : file,
       ),
     );
-    setCurrentFileIndex(newName);
-    toast(`${currentFileIndex} renamed to ${newName}.`);
+    setcurrentFileName(newName);
+    toast(`${currentFileName} renamed to ${newName}.`);
     return true;
   }
 
   function deleteCurrentFile() {
-    localStorage.removeItem(currentFileIndex);
+    localStorage.removeItem(currentFileName);
 
     const newIndex =
       Object.keys(localStorage).filter((key) => key.startsWith("DB:"))?.[0] ??
       null;
 
     setFileMetaData((data) =>
-      data.filter((datum) => datum.name !== currentFileIndex),
+      data.filter((datum) => datum.name !== currentFileName),
     );
-    setCurrentFileIndex(newIndex);
+    setcurrentFileName(newIndex);
 
-    toast(`${currentFileIndex} deleted.`);
+    toast(`${currentFileName} deleted.`);
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -135,8 +133,8 @@ function App() {
     >
       <Header
         setMenuOpen={setMenuOpen}
-        setCurrentFileIndex={setCurrentFileIndex}
-        currentFileIndex={currentFileIndex}
+        setcurrentFileName={setcurrentFileName}
+        currentFileName={currentFileName}
         renameCurrentMarkdown={renameCurrentMarkdown}
         deleteCurrentFile={deleteCurrentFile}
         menuOpen={menuOpen}
@@ -148,7 +146,7 @@ function App() {
         visible={menuOpen}
         theme={theme}
         switchTheme={switchTheme}
-        setCurrentFileIndex={setCurrentFileIndex}
+        setcurrentFileName={setcurrentFileName}
         fileMetaData={fileMetaData}
         contentModified={contentModified}
         addNewDocument={addNewDocument}
@@ -159,7 +157,7 @@ function App() {
       <Main
         fullWidthPreview={fullWidthPreview}
         setFullWidthPreview={setFullWidthPreview}
-        currentFileIndex={currentFileIndex}
+        currentFileName={currentFileName}
         markdown={markdown}
         setMarkdown={modifyDocumentContent}
         gridPosition={{ row: 2, col: 2 }}

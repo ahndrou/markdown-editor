@@ -13,7 +13,7 @@ export default function Header({
   setMenuOpen,
   deleteCurrentFile,
   renameCurrentMarkdown,
-  currentFileIndex,
+  currentFileName,
   menuOpen,
   markdown,
   gridPosition,
@@ -35,12 +35,12 @@ export default function Header({
       </button>
 
       <img
-        className={`me-4 hidden border-600 py-3 pe-4 lg:block ${currentFileIndex !== null ? "border-e-2" : ""}`}
+        className={`me-4 hidden border-600 py-3 pe-4 lg:block ${currentFileName !== null ? "border-e-2" : ""}`}
         alt="Product logo"
         src={logo}
       />
 
-      {currentFileIndex !== null && (
+      {currentFileName !== null && (
         <>
           <div className="me-auto grid grid-cols-[auto_1fr] items-center lg:basis-[20rem]">
             <img
@@ -59,11 +59,11 @@ export default function Header({
               id="docName"
               type="text"
               className="text-heading-m caret-orange min-w-0 border-b-1 border-transparent overflow-ellipsis focus:border-100 focus:outline-0"
-              defaultValue={currentFileIndex}
-              key={currentFileIndex} // Ensures the input updates when the markdown file changes.
+              defaultValue={currentFileName}
+              key={currentFileName} // Ensures the input updates when the markdown file changes.
               onBlur={(e) => {
                 if (!renameCurrentMarkdown(e.target.value)) {
-                  e.target.value = currentFileIndex;
+                  e.target.value = currentFileName;
                 }
               }}
             />
@@ -71,13 +71,13 @@ export default function Header({
 
           <DeleteButton
             deleteCurrentFile={deleteCurrentFile}
-            currentFileName={currentFileIndex}
+            currentFileName={currentFileName}
           />
 
           <button
             className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
             onClick={() => {
-              updateCurrentFileContent(currentFileIndex, markdown);
+              updateCurrentFileContent(currentFileName, markdown);
               toast(`${fileName} saved successfully.`);
             }}
           >

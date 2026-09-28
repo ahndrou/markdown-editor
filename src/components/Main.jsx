@@ -5,7 +5,7 @@ import PreviewToggle from "./PreviewToggle";
 export default function Main({
   fullWidthPreview,
   setFullWidthPreview,
-  currentFileIndex,
+  currentFileName,
   markdown,
   setMarkdown,
   gridPosition,
@@ -26,9 +26,9 @@ export default function Main({
       />
 
       <ContentViewGroup
-        key={currentFileIndex}
+        key={currentFileName}
         fullWidthPreview={fullWidthPreview}
-        fileIndex={currentFileIndex}
+        fileIndex={currentFileName}
         markdown={markdown}
         setMarkdown={setMarkdown}
       />

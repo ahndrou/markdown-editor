@@ -14,7 +14,7 @@ export default function Menu({
   visible,
   theme,
   switchTheme,
-  setCurrentFileIndex,
+  setcurrentFileName,
   fileMetaData,
   gridPosition,
   addNewDocument,
@@ -49,7 +49,7 @@ export default function Menu({
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
                 if (contentModified.current) setPendingFileChange(mdObj.name);
-                else setCurrentFileIndex(mdObj.name);
+                else setcurrentFileName(mdObj.name);
               }}
             >
               <img className="row-span-2" src={fileIcon} />
@@ -88,7 +88,7 @@ export default function Menu({
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
                   saveCurrentMarkdown();
-                  setCurrentFileIndex(pendingFileChange);
+                  setcurrentFileName(pendingFileChange);
                   setPendingFileChange(null);
                 }}
               >
@@ -99,7 +99,7 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  setCurrentFileIndex(pendingFileChange);
+                  setcurrentFileName(pendingFileChange);
                   setPendingFileChange(null);
                 }}
               >
