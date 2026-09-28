@@ -27,7 +27,10 @@ export function getMarkdownFile(index) {
 }
 
 export function initLocalStorage() {
-  localStorage.setItem("DB:welcome.md", JSON.stringify(defaultMarkdown));
+  localStorage.setItem(
+    `${DB_PREFIX}welcome.md`,
+    JSON.stringify(defaultMarkdown),
+  );
 }
 
 export function isStorageInitialized() {
