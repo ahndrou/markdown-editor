@@ -2,6 +2,11 @@ import { getCurrentDate } from "@/utils/generalUtils";
 
 import defaultMarkdown from "../initial-data.json";
 
+// To prevent file names colliding with things such as theme settings
+// (which are also stored in localStorage), they are stored with a
+// prefix.
+const DB_PREFIX = "DB:";
+
 export function saveToLocalStorage(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
@@ -58,18 +63,18 @@ export function initLocalStorage() {
 }
 
 export function isStorageInitialized() {
-  return Object.keys(localStorage).some((key) => key.startsWith("DB:"));
+  return Object.keys(localStorage).some((key) => key.startsWith(DB_PREFIX));
 }
 
 export function getFirstDBKey() {
-  return Object.keys(localStorage).find((key) => key.startsWith("DB:"));
+  return Object.keys(localStorage).find((key) => key.startsWith(DB_PREFIX));
 }
 
 export function getAllStoredFileMetaData() {
   const metaData = [];
 
   for (const entry in localStorage) {
-    if (entry.startsWith("DB:")) {
+    if (entry.startsWith(DB_PREFIX)) {
       metaData.push({
         name: entry,
         createdAt: JSON.parse(localStorage.getItem(entry)).createdAt,
@@ -78,4 +83,12 @@ export function getAllStoredFileMetaData() {
   }
 
   return metaData;
+}
+
+export function removeDBPrefix(fileName) {
+  return fileName.slice(DB_PREFIX.length);
+}
+
+export function addDBPrefix(fileName) {
+  return `${DB_PREFIX}${fileName}`;
 }
