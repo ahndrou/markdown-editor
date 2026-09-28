@@ -35,52 +35,59 @@ export default function Header({
       </button>
 
       <img
-        className="me-4 hidden border-600 border-e-2 py-3 pe-4 lg:block"
+        className={`me-4 hidden border-600 py-3 pe-4 lg:block ${currentFileIndex !== null ? "border-e-2" : ""}`}
         alt="Product logo"
         src={logo}
       />
 
-      <div className="me-auto grid grid-cols-[auto_1fr] items-center lg:basis-[20rem]">
-        <img
-          className="row-span-2 me-4 h-5"
-          src={documentImg}
-          alt="Document icon"
-          aria-hidden
-        />
-        <label className="text-body text-500 hidden lg:block" htmlFor="docName">
-          Document Name
-        </label>
-        <input
-          id="docName"
-          type="text"
-          className="text-heading-m caret-orange min-w-0 border-b-1 border-transparent overflow-ellipsis focus:border-100 focus:outline-0"
-          defaultValue={currentFileIndex}
-          key={currentFileIndex} // Ensures the input updates when the markdown file changes.
-          onBlur={(e) => {
-            if (!renameCurrentMarkdown(e.target.value)) {
-              e.target.value = currentFileIndex;
-            }
-          }}
-        />
-      </div>
+      {currentFileIndex !== null && (
+        <>
+          <div className="me-auto grid grid-cols-[auto_1fr] items-center lg:basis-[20rem]">
+            <img
+              className="row-span-2 me-4 h-5"
+              src={documentImg}
+              alt="Document icon"
+              aria-hidden
+            />
+            <label
+              className="text-body text-500 hidden lg:block"
+              htmlFor="docName"
+            >
+              Document Name
+            </label>
+            <input
+              id="docName"
+              type="text"
+              className="text-heading-m caret-orange min-w-0 border-b-1 border-transparent overflow-ellipsis focus:border-100 focus:outline-0"
+              defaultValue={currentFileIndex}
+              key={currentFileIndex} // Ensures the input updates when the markdown file changes.
+              onBlur={(e) => {
+                if (!renameCurrentMarkdown(e.target.value)) {
+                  e.target.value = currentFileIndex;
+                }
+              }}
+            />
+          </div>
 
-      <DeleteButton
-        deleteCurrentFile={deleteCurrentFile}
-        currentFileName={currentFileIndex}
-      />
+          <DeleteButton
+            deleteCurrentFile={deleteCurrentFile}
+            currentFileName={currentFileIndex}
+          />
 
-      <button
-        className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
-        onClick={() => {
-          updateCurrentFileContent(currentFileIndex, markdown);
-          toast(`${fileName} saved successfully.`);
-        }}
-      >
-        <span className="text-heading-m order-2 hidden lg:block">
-          Save Changes
-        </span>
-        <img className="mx-auto h-6" src={saveImg} alt="Floppy disk icon" />
-      </button>
+          <button
+            className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
+            onClick={() => {
+              updateCurrentFileContent(currentFileIndex, markdown);
+              toast(`${fileName} saved successfully.`);
+            }}
+          >
+            <span className="text-heading-m order-2 hidden lg:block">
+              Save Changes
+            </span>
+            <img className="mx-auto h-6" src={saveImg} alt="Floppy disk icon" />
+          </button>
+        </>
+      )}
     </header>
   );
 }

@@ -20,7 +20,9 @@ function App() {
   );
 
   useEffect(() => {
-    setMarkdown(JSON.parse(localStorage.getItem(currentFileIndex)).content);
+    setMarkdown(
+      JSON.parse(localStorage.getItem(currentFileIndex))?.content ?? null,
+    );
     contentModified.current = false;
   }, [currentFileIndex]);
 
