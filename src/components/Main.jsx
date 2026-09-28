@@ -1,11 +1,10 @@
-import ContentViewGroup from "./ContentViewGroup";
 import EmptyView from "./EmptyView";
+import MarkdownRenderer from "./MarkdownRenderer";
 import PreviewToggle from "./PreviewToggle";
 
 export default function Main({
   fullWidthPreview,
   setFullWidthPreview,
-  currentFileName,
   markdown,
   setMarkdown,
   gridPosition,
@@ -25,13 +24,23 @@ export default function Main({
         className="col-start-4"
       />
 
-      <ContentViewGroup
-        key={currentFileName}
-        fullWidthPreview={fullWidthPreview}
-        fileIndex={currentFileName}
-        markdown={markdown}
-        setMarkdown={setMarkdown}
-      />
+      <section className="bg-background">
+        <h2 className="bg-background-header text-text-secondary text-heading-s p-3 uppercase">
+          Markdown
+        </h2>
+        <textarea
+          className="text-text-primary no-resize field-sizing-content w-full wrap-anywhere focus:outline-none"
+          onChange={(e) => setMarkdown(e.target.value)}
+          value={markdown}
+        ></textarea>
+      </section>
+
+      <section className="bg-background">
+        <h2 className="bg-background-header text-text-secondary text-heading-s p-3 uppercase">
+          Preview
+        </h2>
+        <MarkdownRenderer markdown={markdown} />
+      </section>
     </main>
   );
 }

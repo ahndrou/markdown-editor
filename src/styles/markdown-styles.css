@@ -1,6 +1,6 @@
 @reference "./index.css";
 
-.markdown-preview {
+.rendered-markdown {
   & > * {
     @apply font-roboto-slab text-700 mb-5;
   }
