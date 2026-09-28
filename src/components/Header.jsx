@@ -11,8 +11,7 @@ import DeleteButton from "./DeleteButton";
 
 export default function Header({
   setMenuOpen,
-  setCurrentFileIndex,
-  setMarkdown,
+  deleteCurrentFile,
   renameCurrentMarkdown,
   currentFileIndex,
   menuOpen,
@@ -66,9 +65,7 @@ export default function Header({
       </div>
 
       <DeleteButton
-        setCurrentFileIndex={setCurrentFileIndex}
-        setMarkdown={setMarkdown}
-        currentFileIndex={currentFileIndex}
+        deleteCurrentFile={deleteCurrentFile}
         currentFileName={currentFileIndex}
       />
 

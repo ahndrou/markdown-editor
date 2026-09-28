@@ -102,6 +102,21 @@ function App() {
     return true;
   }
 
+  function deleteCurrentFile() {
+    localStorage.removeItem(currentFileIndex);
+
+    const newIndex =
+      Object.keys(localStorage).filter((key) => key.startsWith("DB:"))?.[0] ??
+      null;
+
+    setFileMetaData((data) =>
+      data.filter((datum) => datum.name !== currentFileIndex),
+    );
+    setCurrentFileIndex(newIndex);
+
+    toast(`${currentFileIndex} deleted.`);
+  }
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullWidthPreview, setFullWidthPreview] = useState(false);
 
@@ -121,6 +136,7 @@ function App() {
         setCurrentFileIndex={setCurrentFileIndex}
         currentFileIndex={currentFileIndex}
         renameCurrentMarkdown={renameCurrentMarkdown}
+        deleteCurrentFile={deleteCurrentFile}
         menuOpen={menuOpen}
         markdown={markdown}
         gridPosition={{ row: 1, col: 2 }}

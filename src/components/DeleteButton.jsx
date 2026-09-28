@@ -8,22 +8,8 @@ import {
 } from "./ui/dialog";
 
 import { TrashCanIcon } from "./SVGComponents.jsx";
-import { deleteFileFromStorage } from "@/utils/localStorageUtils";
-import { toast } from "sonner";
 
-export default function DeleteButton({
-  currentFileIndex,
-  currentFileName,
-  setCurrentFileIndex,
-}) {
-  function deleteCurrentFile() {
-    if (currentFileIndex >= 0) {
-      deleteFileFromStorage(currentFileIndex);
-      setCurrentFileIndex((oldIndex) => (oldIndex === 0 ? 0 : oldIndex - 1));
-      toast(`${currentFileName} deleted.`);
-    }
-  }
-
+export default function DeleteButton({ deleteCurrentFile, currentFileName }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
