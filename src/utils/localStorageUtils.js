@@ -1,5 +1,3 @@
-import { getCurrentDate } from "@/utils/generalUtils";
-
 import defaultMarkdown from "../initial-data.json";
 
 // To prevent file names colliding with things such as theme settings
@@ -26,36 +24,6 @@ export function retrieveFromLocalStorage(key) {
 
 export function getMarkdownFile(index) {
   return retrieveFromLocalStorage(index);
-}
-
-export function addFileToStorage(fileName) {
-  let markdownDb = retrieveFromLocalStorage("markdownDb");
-
-  markdownDb.push({
-    name: fileName,
-    createdAt: getCurrentDate(),
-    content: "# New file.",
-  });
-
-  saveToLocalStorage("markdownDb", markdownDb);
-}
-
-export function deleteFileFromStorage(index) {
-  let markdownDb = retrieveFromLocalStorage("markdownDb");
-  markdownDb = markdownDb.filter((_, i) => i !== index);
-  saveToLocalStorage("markdownDb", markdownDb);
-}
-
-export function updateCurrentFileContent(index, content) {
-  let markdownDb = retrieveFromLocalStorage("markdownDb");
-  markdownDb[index].content = content;
-  saveToLocalStorage("markdownDb", markdownDb);
-}
-
-export function updateCurrentFileName(index, name) {
-  let markdownDb = retrieveFromLocalStorage("markdownDb");
-  markdownDb[index].name = name;
-  saveToLocalStorage("markdownDb", markdownDb);
 }
 
 export function initLocalStorage() {

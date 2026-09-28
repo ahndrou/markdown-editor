@@ -5,17 +5,15 @@ import logo from "../assets/logo.svg";
 import saveImg from "../assets/icon-save.svg";
 import { toast } from "sonner";
 
-import { updateCurrentFileContent } from "../utils/localStorageUtils.js";
-
 import DeleteButton from "./DeleteButton";
 
 export default function Header({
   setMenuOpen,
   deleteCurrentFile,
   renameCurrentMarkdown,
+  saveCurrentMarkdown,
   currentFileName,
   menuOpen,
-  markdown,
   gridPosition,
 }) {
   const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row}`;
@@ -77,8 +75,8 @@ export default function Header({
           <button
             className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
             onClick={() => {
-              updateCurrentFileContent(currentFileName, markdown);
-              toast(`${fileName} saved successfully.`);
+              saveCurrentMarkdown();
+              toast(`${currentFileName} saved successfully.`);
             }}
           >
             <span className="text-heading-m order-2 hidden lg:block">

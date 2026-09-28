@@ -78,6 +78,7 @@ function App() {
     const item = JSON.parse(localStorage.getItem(currentFileName));
     item.content = markdown;
     localStorage.setItem(currentFileName, JSON.stringify(item));
+    contentModified.current = false;
   }
 
   function renameCurrentMarkdown(newName) {
@@ -136,9 +137,9 @@ function App() {
         setcurrentFileName={setcurrentFileName}
         currentFileName={currentFileName}
         renameCurrentMarkdown={renameCurrentMarkdown}
+        saveCurrentMarkdown={saveCurrentMarkdown}
         deleteCurrentFile={deleteCurrentFile}
         menuOpen={menuOpen}
-        markdown={markdown}
         gridPosition={{ row: 1, col: 2 }}
       />
 
