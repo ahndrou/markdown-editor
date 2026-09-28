@@ -16,7 +16,6 @@ export default function Menu({
   switchTheme,
   setcurrentFileName,
   fileMetaData,
-  gridPosition,
   addNewDocument,
   saveCurrentMarkdown,
   contentModified,
@@ -25,11 +24,10 @@ export default function Menu({
 
   // Uses these rather than display: none so a transition is seen.
   const visibleClasses = visible ? "w-65 px-6" : "w-0 px-0";
-  const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row} row-span-2`;
 
   return (
     <nav
-      className={`bg-900 text-100 flex flex-col items-start gap-6 overflow-hidden py-6 transition-all duration-100 ${gridClasses} ${visibleClasses}`}
+      className={`bg-900 text-100 flex h-full flex-col items-start gap-6 overflow-hidden py-6 transition-all duration-100 ${visibleClasses}`}
     >
       <img className="block lg:hidden" src={logo} alt="Company logo" />
 

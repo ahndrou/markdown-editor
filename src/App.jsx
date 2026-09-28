@@ -119,7 +119,6 @@ function App() {
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [fullWidthPreview, setFullWidthPreview] = useState(false);
 
   const [theme, setTheme] = useStoredState("theme", "light");
 
@@ -132,37 +131,38 @@ function App() {
       className={`${theme} relative grid min-h-screen grid-cols-[auto_1fr] grid-rows-[4rem]`}
       id="app-container"
     >
-      <Header
-        setMenuOpen={setMenuOpen}
-        setcurrentFileName={setcurrentFileName}
-        currentFileName={currentFileName}
-        renameCurrentMarkdown={renameCurrentMarkdown}
-        saveCurrentMarkdown={saveCurrentMarkdown}
-        deleteCurrentFile={deleteCurrentFile}
-        menuOpen={menuOpen}
-        gridPosition={{ row: 1, col: 2 }}
-      />
+      <div className="col-start-1 row-span-2 row-start-1">
+        <Menu
+          visible={menuOpen}
+          theme={theme}
+          switchTheme={switchTheme}
+          setcurrentFileName={setcurrentFileName}
+          fileMetaData={fileMetaData}
+          contentModified={contentModified}
+          addNewDocument={addNewDocument}
+          saveCurrentMarkdown={saveCurrentMarkdown}
+        />
+      </div>
 
-      <Menu
-        visible={menuOpen}
-        theme={theme}
-        switchTheme={switchTheme}
-        setcurrentFileName={setcurrentFileName}
-        fileMetaData={fileMetaData}
-        contentModified={contentModified}
-        addNewDocument={addNewDocument}
-        saveCurrentMarkdown={saveCurrentMarkdown}
-        gridPosition={{ row: 1, col: 1 }}
-      />
+      <div className="col-start-2 row-start-1">
+        <Header
+          setMenuOpen={setMenuOpen}
+          setcurrentFileName={setcurrentFileName}
+          currentFileName={currentFileName}
+          renameCurrentMarkdown={renameCurrentMarkdown}
+          saveCurrentMarkdown={saveCurrentMarkdown}
+          deleteCurrentFile={deleteCurrentFile}
+          menuOpen={menuOpen}
+        />
+      </div>
 
-      <Main
-        fullWidthPreview={fullWidthPreview}
-        setFullWidthPreview={setFullWidthPreview}
-        currentFileName={currentFileName}
-        markdown={markdown}
-        setMarkdown={modifyDocumentContent}
-        gridPosition={{ row: 2, col: 2 }}
-      />
+      <div className="col-start-2 row-start-2">
+        <Main
+          currentFileName={currentFileName}
+          markdown={markdown}
+          setMarkdown={modifyDocumentContent}
+        />
+      </div>
 
       <Toaster position="bottom-right" />
     </div>

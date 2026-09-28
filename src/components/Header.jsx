@@ -14,14 +14,9 @@ export default function Header({
   saveCurrentMarkdown,
   currentFileName,
   menuOpen,
-  gridPosition,
 }) {
-  const gridClasses = `col-start-${gridPosition.col} row-start-${gridPosition.row}`;
-
   return (
-    <header
-      className={`${gridClasses} bg-800 text-100 flex h-[4rem] items-center`}
-    >
+    <header className="bg-800 text-100 flex h-[4rem] items-center">
       <button
         className="bg-700 hover:bg-orange me-6 h-full flex-[0_0_4rem] cursor-pointer"
         onClick={() => setMenuOpen((currentValue) => !currentValue)}
