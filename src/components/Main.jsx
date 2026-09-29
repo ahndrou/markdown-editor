@@ -39,7 +39,7 @@ export default function Main({
     </main>
   ) : (
     <main
-      className={`grid h-full ${editorOpen ? "grid-cols-2" : ""} grid-rows-[auto_1fr]`}
+      className={`grid h-full ${editorOpen ? "grid-cols-2" : "grid-cols-1"} grid-rows-[auto_1fr]`}
     >
       {editorOpen && (
         <section className="bg-background border-border row-span-2 row-start-1 grid grid-rows-subgrid border-e">
@@ -54,7 +54,7 @@ export default function Main({
         </section>
       )}
 
-      <section className="bg-background col-start-2 row-span-2 row-start-1 grid grid-rows-subgrid">
+      <section className="bg-background col-end-[-1] row-span-2 row-start-1 grid grid-rows-subgrid">
         <h2 className="bg-background-header text-text-secondary text-heading-s row-start-1 p-4 uppercase">
           Preview
         </h2>
@@ -64,7 +64,7 @@ export default function Main({
       </section>
 
       <button
-        className="group bg-background-header col-start-2 row-start-1 cursor-pointer justify-self-end p-3"
+        className="group bg-background-header col-end-[-1] row-start-1 cursor-pointer justify-self-end p-3"
         onClick={() => setEditorOpen(!editorOpen)}
       >
         {editorOpen ? (
