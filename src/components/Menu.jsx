@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 
 export default function Menu({
-  setcurrentFileName,
+  setCurrentFileName,
   fileMetaData,
   addNewDocument,
   saveCurrentMarkdown,
@@ -38,7 +38,7 @@ export default function Menu({
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
                 if (contentModified.current) setPendingFileChange(mdObj.name);
-                else setcurrentFileName(mdObj.name);
+                else setCurrentFileName(mdObj.name);
               }}
             >
               <img className="row-span-2" src={fileIcon} />
@@ -71,7 +71,7 @@ export default function Menu({
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
                   saveCurrentMarkdown();
-                  setcurrentFileName(pendingFileChange);
+                  setCurrentFileName(pendingFileChange);
                   setPendingFileChange(null);
                 }}
               >
@@ -82,7 +82,7 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  setcurrentFileName(pendingFileChange);
+                  setCurrentFileName(pendingFileChange);
                   setPendingFileChange(null);
                 }}
               >
