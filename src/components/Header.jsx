@@ -9,11 +9,11 @@ import DeleteButton from "./DeleteButton";
 
 export default function Header({
   setMenuOpen,
+  menuOpen,
   deleteCurrentFile,
   renameCurrentMarkdown,
   saveCurrentMarkdown,
   currentFileName,
-  menuOpen,
 }) {
   return (
     <header className="bg-800 text-100 flex h-[4rem] items-center">

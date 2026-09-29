@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import useStoredState from "./hooks/useStoredState";
 
 import Header from "./components/Header";
 import Menu from "./components/Menu";
@@ -103,15 +102,9 @@ function App() {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const [theme, setTheme] = useStoredState("theme", "light");
-
-  function switchTheme() {
-    setTheme((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
-  }
-
   return (
     <div
-      className={`${theme} relative grid min-h-screen grid-rows-[4rem] ${menuOpen ? "grid-cols-[16rem_1fr]" : "grid-cols-[0_1fr]"}`}
+      className={`relative grid min-h-screen grid-rows-[4rem] ${menuOpen ? "grid-cols-[16rem_1fr]" : "grid-cols-[0_1fr]"}`}
       id="app-container"
     >
       <div
@@ -124,22 +117,17 @@ function App() {
           addNewDocument={addNewDocument}
           saveCurrentMarkdown={saveCurrentMarkdown}
         />
-        <ThemeSwitch
-          theme={theme}
-          switchTheme={switchTheme}
-          className={"justify-self-center"}
-        />
+        <ThemeSwitch className={"justify-self-center"} />
       </div>
 
       <div className="col-start-2 row-start-1">
         <Header
           setMenuOpen={setMenuOpen}
-          setCurrentFileName={setCurrentFileName}
-          currentFileName={currentFileName}
+          menuOpen={menuOpen}
+          deleteCurrentFile={deleteCurrentFile}
           renameCurrentMarkdown={renameCurrentMarkdown}
           saveCurrentMarkdown={saveCurrentMarkdown}
-          deleteCurrentFile={deleteCurrentFile}
-          menuOpen={menuOpen}
+          currentFileName={currentFileName}
         />
       </div>
 
