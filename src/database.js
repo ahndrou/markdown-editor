@@ -54,7 +54,7 @@ export function getIDArray() {
  * @returns True if there are no database entries.
  */
 export function isEmpty() {
-  return getIDArray().length !== 0;
+  return getIDArray().length === 0;
 }
 
 export function getDocument(documentID) {
