@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
 
 function App() {
-  const [currentFileName, setcurrentFileName] = useState(() => getFirstDBKey());
+  const [currentFileName, setCurrentFileName] = useState(() => getFirstDBKey());
 
   const [fileMetaData, setFileMetaData] = useState(() =>
     getAllStoredFileMetaData(),
@@ -81,7 +81,7 @@ function App() {
         file.name === currentFileName ? { ...file, name: newName } : file,
       ),
     );
-    setcurrentFileName(newName);
+    setCurrentFileName(newName);
     toast(`${currentFileName} renamed to ${newName}.`);
     return true;
   }
@@ -96,7 +96,7 @@ function App() {
     setFileMetaData((data) =>
       data.filter((datum) => datum.name !== currentFileName),
     );
-    setcurrentFileName(newIndex);
+    setCurrentFileName(newIndex);
 
     toast(`${currentFileName} deleted.`);
   }
@@ -118,7 +118,7 @@ function App() {
         className={`bg-900 col-start-1 row-span-2 row-start-1 overflow-hidden ${menuOpen ? "px-6" : ""}`}
       >
         <Menu
-          setcurrentFileName={setcurrentFileName}
+          setCurrentFileName={setCurrentFileName}
           fileMetaData={fileMetaData}
           contentModified={contentModified}
           addNewDocument={addNewDocument}
@@ -134,7 +134,7 @@ function App() {
       <div className="col-start-2 row-start-1">
         <Header
           setMenuOpen={setMenuOpen}
-          setcurrentFileName={setcurrentFileName}
+          setCurrentFileName={setCurrentFileName}
           currentFileName={currentFileName}
           renameCurrentMarkdown={renameCurrentMarkdown}
           saveCurrentMarkdown={saveCurrentMarkdown}
