@@ -13,6 +13,7 @@ import {
 } from "./utils/localStorageUtils";
 import { getCurrentDate } from "./utils/generalUtils";
 import { toast } from "sonner";
+import ThemeSwitch from "./components/ui/ThemeSwitch";
 
 function App() {
   const [currentFileName, setcurrentFileName] = useState(() => getFirstDBKey());
@@ -128,19 +129,23 @@ function App() {
 
   return (
     <div
-      className={`${theme} relative grid min-h-screen grid-cols-[auto_1fr] grid-rows-[4rem]`}
+      className={`${theme} relative grid min-h-screen grid-rows-[4rem] ${menuOpen ? "grid-cols-[16rem_1fr]" : "grid-cols-[0_1fr]"}`}
       id="app-container"
     >
-      <div className="col-start-1 row-span-2 row-start-1">
+      <div
+        className={`bg-900 col-start-1 row-span-2 row-start-1 overflow-hidden ${menuOpen ? "px-6" : ""}`}
+      >
         <Menu
-          visible={menuOpen}
-          theme={theme}
-          switchTheme={switchTheme}
           setcurrentFileName={setcurrentFileName}
           fileMetaData={fileMetaData}
           contentModified={contentModified}
           addNewDocument={addNewDocument}
           saveCurrentMarkdown={saveCurrentMarkdown}
+        />
+        <ThemeSwitch
+          theme={theme}
+          switchTheme={switchTheme}
+          className={"justify-self-center"}
         />
       </div>
 

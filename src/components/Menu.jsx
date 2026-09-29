@@ -1,5 +1,4 @@
 import logo from "../assets/logo.svg";
-import ThemeSwitch from "./ui/ThemeSwitch";
 import fileIcon from "../assets/icon-document.svg";
 
 import {
@@ -11,9 +10,6 @@ import {
 import { useState } from "react";
 
 export default function Menu({
-  visible,
-  theme,
-  switchTheme,
   setcurrentFileName,
   fileMetaData,
   addNewDocument,
@@ -22,19 +18,14 @@ export default function Menu({
 }) {
   const [pendingFileChange, setPendingFileChange] = useState(null);
 
-  // Uses these rather than display: none so a transition is seen.
-  const visibleClasses = visible ? "w-65 px-6" : "w-0 px-0";
-
   return (
-    <nav
-      className={`bg-900 text-100 flex h-full flex-col items-start gap-6 overflow-hidden py-6 transition-all duration-100 ${visibleClasses}`}
-    >
+    <nav className={`text-100 grid content-start gap-6 py-6`}>
       <img className="block lg:hidden" src={logo} alt="Company logo" />
 
       <h2 className="text-500 text-heading-s w-max uppercase">My Documents</h2>
 
       <button
-        className="bg-orange hover:bg-orange-hover text-heading-m w-max cursor-pointer rounded-lg px-12 py-3"
+        className="bg-orange hover:bg-orange-hover text-heading-m cursor-pointer rounded-lg py-3"
         onClick={addNewDocument}
       >
         + New Document
@@ -59,12 +50,6 @@ export default function Menu({
           </li>
         ))}
       </ul>
-
-      <ThemeSwitch
-        className="self-center"
-        theme={theme}
-        switchTheme={switchTheme}
-      />
 
       <Dialog
         open={pendingFileChange !== null}
