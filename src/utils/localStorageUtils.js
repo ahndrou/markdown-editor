@@ -1,4 +1,4 @@
-import defaultMarkdown from "../initial-data.json";
+import defaultMarkdown from "../assets/initial-data.json";
 
 // To prevent file names colliding with things such as theme settings
 // (which are also stored in localStorage), they are stored with a
