@@ -5,99 +5,20 @@ import Menu from "./components/Menu";
 import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
 
-import {
-  getAllStoredFileMetaData,
-  getFirstDBKey,
-} from "./utils/localStorageUtils";
-import { getCurrentDate } from "./utils/generalUtils";
-import { toast } from "sonner";
+import { getFirstDBKey } from "./utils/localStorageUtils";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
 
 function App() {
   const [currentFileName, setCurrentFileName] = useState(() => getFirstDBKey());
 
-  const [fileMetaData, setFileMetaData] = useState(() =>
-    getAllStoredFileMetaData(),
-  );
-
   const contentModified = useRef(false);
   const markdownRef = useRef(null);
-
-  function addNewDocument() {
-    const NEW_DOC_BASE_NAME = "DB:document";
-    let newFileNum = 1;
-    let newFileName = `${NEW_DOC_BASE_NAME}.md`;
-
-    while (true) {
-      let fileAlreadyExists = fileMetaData.some(
-        (file) => file.name === newFileName,
-      );
-
-      if (fileAlreadyExists) {
-        newFileName = `${NEW_DOC_BASE_NAME}${newFileNum}.md`;
-        newFileNum++;
-      } else {
-        break;
-      }
-    }
-
-    const createdAtDate = getCurrentDate();
-
-    setFileMetaData((state) => [
-      ...state,
-      { name: newFileName, createdAt: createdAtDate },
-    ]);
-
-    const document = {
-      createdAt: createdAtDate,
-      content: "# New file.",
-    };
-
-    localStorage.setItem(newFileName, JSON.stringify(document));
-  }
 
   function saveDocumentEdits() {
     const item = JSON.parse(localStorage.getItem(currentFileName));
     item.content = markdownRef.current;
     localStorage.setItem(currentFileName, JSON.stringify(item));
     contentModified.current = false;
-  }
-
-  function renameCurrentDocument(newName) {
-    if (!newName || newName === currentFileName) return false;
-
-    if (fileMetaData.some((file) => file.name === newName)) {
-      toast(`${newName} already exists.`);
-      return false;
-    }
-
-    const item = localStorage.getItem(currentFileName);
-    localStorage.setItem(newName, item);
-    localStorage.removeItem(currentFileName);
-
-    setFileMetaData((state) =>
-      state.map((file) =>
-        file.name === currentFileName ? { ...file, name: newName } : file,
-      ),
-    );
-    setCurrentFileName(newName);
-    toast(`${currentFileName} renamed to ${newName}.`);
-    return true;
-  }
-
-  function deleteCurrentDocument() {
-    localStorage.removeItem(currentFileName);
-
-    const newIndex =
-      Object.keys(localStorage).filter((key) => key.startsWith("DB:"))?.[0] ??
-      null;
-
-    setFileMetaData((data) =>
-      data.filter((datum) => datum.name !== currentFileName),
-    );
-    setCurrentFileName(newIndex);
-
-    toast(`${currentFileName} deleted.`);
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -112,9 +33,7 @@ function App() {
       >
         <Menu
           setCurrentFileName={setCurrentFileName}
-          fileMetaData={fileMetaData}
           contentModified={contentModified}
-          addNewDocument={addNewDocument}
           saveCurrentMarkdown={saveDocumentEdits}
         />
         <ThemeSwitch className={"justify-self-center"} />
@@ -124,10 +43,9 @@ function App() {
         <Header
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen}
-          deleteCurrentFile={deleteCurrentDocument}
-          renameCurrentMarkdown={renameCurrentDocument}
           saveCurrentMarkdown={saveDocumentEdits}
           currentFileName={currentFileName}
+          setCurrentFileName={setCurrentFileName}
         />
       </div>
 

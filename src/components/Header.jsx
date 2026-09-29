@@ -6,15 +6,40 @@ import saveImg from "../assets/icon-save.svg";
 import { toast } from "sonner";
 
 import DeleteButton from "./DeleteButton";
+import { useFiles } from "@/contexts/FilesContext";
 
 export default function Header({
   setMenuOpen,
   menuOpen,
-  deleteCurrentFile,
-  renameCurrentMarkdown,
   saveCurrentMarkdown,
   currentFileName,
+  setCurrentFileName,
 }) {
+  const { fileExists, renameFile, deleteFile } = useFiles();
+
+  function renameCurrentDocument(newName) {
+    if (newName === currentFileName) return false;
+
+    if (newName === "") {
+      toast("Given file name cannot be empty.");
+    }
+
+    if (fileExists(newName)) {
+      toast(`${newName} already exists.`);
+      return false;
+    }
+
+    renameFile(currentFileName, newName);
+    setCurrentFileName(newName);
+    toast(`${currentFileName} renamed to ${newName}.`);
+    return true;
+  }
+
+  function deleteCurrentDocument() {
+    setCurrentFileName(deleteFile(currentFileName));
+    toast(`${currentFileName} deleted.`);
+  }
+
   return (
     <header className="bg-800 text-100 flex h-[4rem] items-center">
       <button
@@ -55,7 +80,7 @@ export default function Header({
               defaultValue={currentFileName}
               key={currentFileName} // Ensures the input updates when the markdown file changes.
               onBlur={(e) => {
-                if (!renameCurrentMarkdown(e.target.value)) {
+                if (!renameCurrentDocument(e.target.value)) {
                   e.target.value = currentFileName;
                 }
               }}
@@ -63,7 +88,7 @@ export default function Header({
           </div>
 
           <DeleteButton
-            deleteCurrentFile={deleteCurrentFile}
+            deleteCurrentFile={deleteCurrentDocument}
             currentFileName={currentFileName}
           />
 
