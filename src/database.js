@@ -49,6 +49,14 @@ export function getIDArray() {
   return Object.keys(localStorage).filter((key) => key.startsWith(PREFIX));
 }
 
+/**
+ *
+ * @returns True if there are no database entries.
+ */
+export function isEmpty() {
+  return getIDArray().length !== 0;
+}
+
 export function getDocument(documentID) {
   return JSON.parse(localStorage.getItem(documentID));
 }
