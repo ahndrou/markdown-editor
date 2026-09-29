@@ -56,14 +56,14 @@ function App() {
     localStorage.setItem(newFileName, JSON.stringify(document));
   }
 
-  function saveCurrentMarkdown() {
+  function saveDocumentEdits() {
     const item = JSON.parse(localStorage.getItem(currentFileName));
     item.content = markdownRef.current;
     localStorage.setItem(currentFileName, JSON.stringify(item));
     contentModified.current = false;
   }
 
-  function renameCurrentMarkdown(newName) {
+  function renameCurrentDocument(newName) {
     if (!newName || newName === currentFileName) return false;
 
     if (fileMetaData.some((file) => file.name === newName)) {
@@ -85,7 +85,7 @@ function App() {
     return true;
   }
 
-  function deleteCurrentFile() {
+  function deleteCurrentDocument() {
     localStorage.removeItem(currentFileName);
 
     const newIndex =
@@ -115,7 +115,7 @@ function App() {
           fileMetaData={fileMetaData}
           contentModified={contentModified}
           addNewDocument={addNewDocument}
-          saveCurrentMarkdown={saveCurrentMarkdown}
+          saveCurrentMarkdown={saveDocumentEdits}
         />
         <ThemeSwitch className={"justify-self-center"} />
       </div>
@@ -124,9 +124,9 @@ function App() {
         <Header
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen}
-          deleteCurrentFile={deleteCurrentFile}
-          renameCurrentMarkdown={renameCurrentMarkdown}
-          saveCurrentMarkdown={saveCurrentMarkdown}
+          deleteCurrentFile={deleteCurrentDocument}
+          renameCurrentMarkdown={renameCurrentDocument}
+          saveCurrentMarkdown={saveDocumentEdits}
           currentFileName={currentFileName}
         />
       </div>
