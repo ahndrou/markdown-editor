@@ -1,10 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmptyView from "./EmptyView";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { ShowPreviewIcon, HidePreviewIcon } from "./SVGComponents.jsx";
+import { getMarkdownFile } from "@/utils/localStorageUtils";
 
-export default function Main({ markdown, setMarkdown }) {
+export default function Main({
+  currentFileName,
+  contentModifiedRef,
+  markdownRef,
+}) {
   const [editorOpen, setEditorOpen] = useState(true);
+
+  const [markdown, setMarkdown] = useState(
+    () => getMarkdownFile(currentFileName).content,
+  );
+
+  useEffect(() => {
+    setMarkdown(
+      JSON.parse(localStorage.getItem(currentFileName))?.content ?? null,
+    );
+    contentModifiedRef.current = false;
+  }, [currentFileName]);
+
+  useEffect(() => {
+    markdownRef.current = markdown;
+  }, [markdown]);
+
+  function modifyDocumentContent(newContent) {
+    if (newContent !== markdown) {
+      contentModifiedRef.current = true;
+    }
+    setMarkdown(newContent);
+  }
 
   return markdown === null ? (
     <main className="bg-background grid h-full content-center justify-center">
@@ -21,7 +48,7 @@ export default function Main({ markdown, setMarkdown }) {
           </h2>
           <textarea
             className="text-text-primary no-resize field-sizing-content w-full p-4 wrap-anywhere focus:outline-none"
-            onChange={(e) => setMarkdown(e.target.value)}
+            onChange={(e) => modifyDocumentContent(e.target.value)}
             value={markdown}
           ></textarea>
         </section>

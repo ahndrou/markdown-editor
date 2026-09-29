@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useStoredState from "./hooks/useStoredState";
 
 import Header from "./components/Header";
@@ -9,7 +9,6 @@ import { Toaster } from "./components/ui/sonner";
 import {
   getAllStoredFileMetaData,
   getFirstDBKey,
-  getMarkdownFile,
 } from "./utils/localStorageUtils";
 import { getCurrentDate } from "./utils/generalUtils";
 import { toast } from "sonner";
@@ -18,29 +17,12 @@ import ThemeSwitch from "./components/ui/ThemeSwitch";
 function App() {
   const [currentFileName, setcurrentFileName] = useState(() => getFirstDBKey());
 
-  useEffect(() => {
-    setMarkdown(
-      JSON.parse(localStorage.getItem(currentFileName))?.content ?? null,
-    );
-    contentModified.current = false;
-  }, [currentFileName]);
-
-  const [markdown, setMarkdown] = useState(
-    () => getMarkdownFile(currentFileName).content,
-  );
-
   const [fileMetaData, setFileMetaData] = useState(() =>
     getAllStoredFileMetaData(),
   );
 
   const contentModified = useRef(false);
-
-  function modifyDocumentContent(newContent) {
-    if (newContent !== markdown) {
-      contentModified.current = true;
-    }
-    setMarkdown(newContent);
-  }
+  const markdownRef = useRef(null);
 
   function addNewDocument() {
     const NEW_DOC_BASE_NAME = "DB:document";
@@ -77,7 +59,7 @@ function App() {
 
   function saveCurrentMarkdown() {
     const item = JSON.parse(localStorage.getItem(currentFileName));
-    item.content = markdown;
+    item.content = markdownRef.current;
     localStorage.setItem(currentFileName, JSON.stringify(item));
     contentModified.current = false;
   }
@@ -164,8 +146,8 @@ function App() {
       <div className="col-start-2 row-start-2">
         <Main
           currentFileName={currentFileName}
-          markdown={markdown}
-          setMarkdown={modifyDocumentContent}
+          contentModifiedRef={contentModified}
+          markdownRef={markdownRef}
         />
       </div>
 
