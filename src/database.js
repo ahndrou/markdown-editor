@@ -40,6 +40,19 @@ export function initialize() {
   addDocument(defaultDocument);
 }
 
+/**
+ * Filters out keys for DB entries only, excluding other properties in
+ * localStorage.
+ * @returns Array of keys for all database entries.
+ */
+export function getIDArray() {
+  return Object.keys(localStorage).filter((key) => key.startsWith(PREFIX));
+}
+
+export function getDocument(documentID) {
+  return JSON.parse(localStorage.getItem(documentID));
+}
+
 function addDocument(documentObj) {
   localStorage.setItem(createID(), JSON.stringify(documentObj));
 }
