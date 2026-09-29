@@ -15,7 +15,7 @@ export default function Main({ markdown, setMarkdown }) {
       className={`grid h-full ${editorOpen ? "grid-cols-2" : ""} grid-rows-[auto_1fr]`}
     >
       {editorOpen && (
-        <section className="bg-background row-span-2 row-start-1 grid grid-rows-subgrid border-300 border-e">
+        <section className="bg-background border-border row-span-2 row-start-1 grid grid-rows-subgrid border-e">
           <h2 className="bg-background-header text-text-secondary text-heading-s row-start-1 p-4 uppercase">
             Markdown
           </h2>
