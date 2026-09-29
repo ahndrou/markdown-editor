@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import EmptyView from "./EmptyView";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { ShowPreviewIcon, HidePreviewIcon } from "./SVGComponents.jsx";
 import { getMarkdownFile } from "@/utils/localStorageUtils";
@@ -34,8 +33,13 @@ export default function Main({
   }
 
   return markdown === null ? (
-    <main className="bg-background grid h-full content-center justify-center">
-      <EmptyView />
+    <main className="bg-background grid h-full content-center justify-center gap-2">
+      <h2 className="text-text-accent max-w-prose text-2xl">
+        No content to show.{" "}
+      </h2>
+      <p className="text-text-primary max-w-prose">
+        Create a new document using the 'New Document' button in the menu.
+      </p>
     </main>
   ) : (
     <main
