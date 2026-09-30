@@ -11,9 +11,9 @@ import { useState } from "react";
 import { useFiles } from "@/contexts/FilesContext";
 
 export default function Menu({
-  setCurrentFileName,
-  saveCurrentMarkdown,
-  contentModified,
+  onDocumentChange,
+  onDocumentSave,
+  docHasUnsavedChanges,
 }) {
   const { fileMetaData, createFile } = useFiles();
   const [pendingFileChange, setPendingFileChange] = useState(null);
@@ -37,8 +37,9 @@ export default function Menu({
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
-                if (contentModified.current) setPendingFileChange(mdObj.name);
-                else setCurrentFileName(mdObj.name);
+                if (docHasUnsavedChanges.current)
+                  setPendingFileChange(mdObj.name);
+                else onDocumentChange(mdObj.name);
               }}
             >
               <img className="row-span-2" src={fileIcon} />
@@ -70,8 +71,8 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  saveCurrentMarkdown();
-                  setCurrentFileName(pendingFileChange);
+                  onDocumentChange(pendingFileChange);
+                  onDocumentSave();
                   setPendingFileChange(null);
                 }}
               >
@@ -82,7 +83,7 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  setCurrentFileName(pendingFileChange);
+                  onDocumentChange(pendingFileChange);
                   setPendingFileChange(null);
                 }}
               >

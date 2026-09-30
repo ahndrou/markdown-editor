@@ -3,17 +3,13 @@ import { createRoot } from "react-dom/client";
 import "./styles/index.css";
 import App from "./App.jsx";
 import { FilesProvider } from "./contexts/FilesContext.jsx";
-import {
-  initLocalStorage,
-  isStorageInitialized,
-} from "./utils/localStorageUtils";
+import * as database from "./database";
 
 // Side effect import
 import "./twMergeConfig.js";
 
-if (!isStorageInitialized()) {
-  console.log("initializing");
-  initLocalStorage();
+if (database.isEmpty()) {
+  database.initialize();
 }
 
 createRoot(document.getElementById("root")).render(

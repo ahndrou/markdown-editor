@@ -5,7 +5,7 @@ import { getMarkdownFile } from "@/utils/localStorageUtils";
 
 export default function Main({
   currentFileName,
-  contentModifiedRef,
+  docHasUnsavedChanges,
   markdownRef,
 }) {
   const [editorOpen, setEditorOpen] = useState(true);
@@ -18,7 +18,7 @@ export default function Main({
     setMarkdown(
       JSON.parse(localStorage.getItem(currentFileName))?.content ?? null,
     );
-    contentModifiedRef.current = false;
+    docHasUnsavedChanges.current = false;
   }, [currentFileName]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Main({
 
   function modifyDocumentContent(newContent) {
     if (newContent !== markdown) {
-      contentModifiedRef.current = true;
+      docHasUnsavedChanges.current = true;
     }
     setMarkdown(newContent);
   }

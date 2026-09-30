@@ -4,21 +4,21 @@ import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
-
-import { getFirstDBKey } from "./utils/localStorageUtils";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
 
-function App() {
-  const [currentFileName, setCurrentFileName] = useState(() => getFirstDBKey());
+import * as database from "./database";
 
-  const contentModified = useRef(false);
+function App() {
+  const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
+
+  const docHasUnsavedChanges = useRef(false);
   const markdownRef = useRef(null);
 
   function saveDocumentEdits() {
-    const item = JSON.parse(localStorage.getItem(currentFileName));
+    const item = JSON.parse(localStorage.getItem(documentID));
     item.content = markdownRef.current;
-    localStorage.setItem(currentFileName, JSON.stringify(item));
-    contentModified.current = false;
+    localStorage.setItem(documentID, JSON.stringify(item));
+    docHasUnsavedChanges.current = false;
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,9 +32,9 @@ function App() {
         className={`bg-900 col-start-1 row-span-2 row-start-1 overflow-hidden ${menuOpen ? "px-6" : ""}`}
       >
         <Menu
-          setCurrentFileName={setCurrentFileName}
-          contentModified={contentModified}
-          saveCurrentMarkdown={saveDocumentEdits}
+          onDocumentChange={setDocumentID}
+          onDocumentSave={saveDocumentEdits}
+          docHasUnsavedChanges={docHasUnsavedChanges}
         />
         <ThemeSwitch className={"justify-self-center"} />
       </div>
@@ -44,15 +44,15 @@ function App() {
           setMenuOpen={setMenuOpen}
           menuOpen={menuOpen}
           saveCurrentMarkdown={saveDocumentEdits}
-          currentFileName={currentFileName}
-          setCurrentFileName={setCurrentFileName}
+          currentFileName={documentID}
+          setCurrentFileName={setDocumentID}
         />
       </div>
 
       <div className="col-start-2 row-start-2">
         <Main
-          currentFileName={currentFileName}
-          contentModifiedRef={contentModified}
+          currentFileName={documentID}
+          docHasUnsavedChanges={docHasUnsavedChanges}
           markdownRef={markdownRef}
         />
       </div>
