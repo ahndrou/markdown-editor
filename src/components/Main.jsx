@@ -1,36 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MarkdownRenderer from "./MarkdownRenderer";
 import { ShowPreviewIcon, HidePreviewIcon } from "./SVGComponents.jsx";
-import { getMarkdownFile } from "@/utils/localStorageUtils";
 
-export default function Main({
-  documentID,
-  docHasUnsavedChanges,
-  markdownRef,
-}) {
+export default function Main({ empty, content, onContentEdit }) {
   const [editorOpen, setEditorOpen] = useState(true);
 
-  const [markdown, setMarkdown] = useState(
-    () => getMarkdownFile(documentID).content,
-  );
-
-  useEffect(() => {
-    setMarkdown(JSON.parse(localStorage.getItem(documentID))?.content ?? null);
-    docHasUnsavedChanges.current = false;
-  }, [documentID]);
-
-  useEffect(() => {
-    markdownRef.current = markdown;
-  }, [markdown]);
-
-  function modifyDocumentContent(newContent) {
-    if (newContent !== markdown) {
-      docHasUnsavedChanges.current = true;
-    }
-    setMarkdown(newContent);
-  }
-
-  return markdown === null ? (
+  return empty ? (
     <main className="bg-background grid h-full content-center justify-center gap-2">
       <h2 className="text-text-accent max-w-prose text-2xl">
         No content to show.{" "}
@@ -50,8 +25,8 @@ export default function Main({
           </h2>
           <textarea
             className="text-text-primary no-resize field-sizing-content w-full p-4 wrap-anywhere focus:outline-none"
-            onChange={(e) => modifyDocumentContent(e.target.value)}
-            value={markdown}
+            onChange={(e) => onContentEdit(e.target.value)}
+            value={content}
           ></textarea>
         </section>
       )}
@@ -61,7 +36,7 @@ export default function Main({
           Preview
         </h2>
         <div className="p-4">
-          <MarkdownRenderer markdown={markdown} />
+          <MarkdownRenderer markdown={content} />
         </div>
       </section>
 

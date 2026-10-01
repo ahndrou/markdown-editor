@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import Header from "./components/Header";
@@ -9,6 +9,7 @@ import ThemeSwitch from "./components/ui/ThemeSwitch";
 import { useDocumentSet } from "./contexts/DocumentSetProvider";
 
 import * as database from "./database";
+import { getMarkdownFile } from "./utils/localStorageUtils";
 
 function App() {
   const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
@@ -19,6 +20,18 @@ function App() {
     deleteDocument,
     modifyDocumentContent,
   } = useDocumentSet();
+
+  const [contentDraft, setContentDraft] = useState(
+    () => getMarkdownFile(documentID).content,
+  );
+
+  useEffect(
+    () => setContentDraft(getMarkdownFile(documentID).content),
+    [documentID],
+  );
+
+  const hasUnsavedChanges =
+    contentDraft !== getMarkdownFile(documentID).content;
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -42,12 +55,8 @@ function App() {
     toast(`${documentName} deleted.`);
   }
 
-  const docHasUnsavedChanges = useRef(false);
-  const markdownRef = useRef(null);
-
   function saveDocumentEdits() {
     modifyDocumentContent(documentID, markdownRef.current);
-    docHasUnsavedChanges.current = false;
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,7 +72,7 @@ function App() {
         <Menu
           onDocumentChange={setDocumentID}
           onDocumentSave={saveDocumentEdits}
-          docHasUnsavedChanges={docHasUnsavedChanges}
+          docHasUnsavedChanges={hasUnsavedChanges}
         />
         <ThemeSwitch className={"justify-self-center"} />
       </div>
@@ -81,9 +90,9 @@ function App() {
 
       <div className="col-start-2 row-start-2">
         <Main
-          documentID={documentID}
-          docHasUnsavedChanges={docHasUnsavedChanges}
-          markdownRef={markdownRef}
+          empty={documentID === null}
+          content={contentDraft}
+          onContentEdit={setContentDraft}
         />
       </div>
 
