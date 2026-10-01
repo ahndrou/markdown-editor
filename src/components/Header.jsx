@@ -15,27 +15,23 @@ export default function Header({
   onDocumentSave,
   setDocumentID,
 }) {
-  const { docSetMetaData, documentExists, renameDocument, deleteDocument } =
-    useDocumentSet();
+  const { docSetMetaData, renameDocument, deleteDocument } = useDocumentSet();
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
 
   function renameCurrentDocument(newName) {
-    if (newName === documentName) return false;
+    const result = renameDocument(documentID, newName);
 
-    if (newName === "") {
+    if (result.ok) {
+      toast(`${result.oldName} renamed to ${newName}.`);
+    } else if (result.reason === "empty") {
       toast("Given file name cannot be empty.");
-    }
-
-    if (documentExists(newName)) {
+    } else if (result.reason === "duplicate") {
       toast(`${newName} already exists.`);
-      return false;
     }
 
-    renameDocument(documentID, newName);
-    toast(`${documentName} renamed to ${newName}.`);
-    return true;
+    return result.ok;
   }
 
   function deleteCurrentDocument() {

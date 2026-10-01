@@ -48,12 +48,22 @@ export function DocumentSetProvider({ children }) {
     ]);
   }
 
+  // Returns { ok: true, oldName } on success, or
+  // { ok: false, reason: "unchanged" | "empty" | "duplicate" } on failure.
   function renameDocument(id, newName) {
+    const oldName = docSetMetaData.find((doc) => doc.id === id)?.name;
+
+    if (newName === oldName) return { ok: false, reason: "unchanged" };
+    if (newName === "") return { ok: false, reason: "empty" };
+    if (documentExists(newName)) return { ok: false, reason: "duplicate" };
+
     database.renameDocument(id, newName);
 
     setDocSetMetaData((state) =>
       state.map((doc) => (doc.id === id ? { ...doc, name: newName } : doc)),
     );
+
+    return { ok: true, oldName };
   }
 
   // Returns the ID of the file to open next, or null if none remain.
@@ -70,7 +80,6 @@ export function DocumentSetProvider({ children }) {
     <DocumentSetContext.Provider
       value={{
         docSetMetaData,
-        documentExists,
         createDocument,
         renameDocument,
         deleteDocument,
