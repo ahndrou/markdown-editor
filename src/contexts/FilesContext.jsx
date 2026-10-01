@@ -4,8 +4,14 @@ import * as database from "@/database";
 
 /**
  * This module should act as an interface to the document database.
- *
  * It should abstract from the implementation of the database.
+ *
+ * Currently uses localStorage and so is synchronous. As such,
+ * it works by updating the localStorage object, and then immediately
+ * duplicating it in React state.
+ *
+ * The idea behind this design is an attempt to make the app easier to
+ * change databases - perhaps to async ones too.
  */
 
 const FilesContext = createContext(null);
