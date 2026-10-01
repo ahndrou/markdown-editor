@@ -8,14 +8,14 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { useState } from "react";
-import { useFiles } from "@/contexts/FilesContext";
+import { useDocumentSet } from "@/contexts/DocumentSetProvider";
 
 export default function Menu({
   onDocumentChange,
   onDocumentSave,
   docHasUnsavedChanges,
 }) {
-  const { fileMetaData, createFile } = useFiles();
+  const { docSetMetaData, createDocument } = useDocumentSet();
   const [pendingFileChange, setPendingFileChange] = useState(null);
 
   return (
@@ -26,13 +26,13 @@ export default function Menu({
 
       <button
         className="bg-orange hover:bg-orange-hover text-heading-m cursor-pointer rounded-lg py-3"
-        onClick={createFile}
+        onClick={createDocument}
       >
         + New Document
       </button>
 
       <ul className="grid w-max gap-2">
-        {fileMetaData.map((mdObj) => (
+        {docSetMetaData.map((mdObj) => (
           <li key={mdObj.id}>
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"

@@ -5,7 +5,7 @@
  * and so this class intends to act as an interface which isolates
  * the database part and acts as a nice interface.
  *
- * Use FilesContext - don't access these directly.
+ * Use DocumentSetProvider - don't access these directly.
  */
 
 import { getCurrentDate } from "./utils/generalUtils";

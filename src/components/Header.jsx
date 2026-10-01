@@ -6,7 +6,7 @@ import saveImg from "../assets/icon-save.svg";
 import { toast } from "sonner";
 
 import DeleteButton from "./DeleteButton";
-import { useFiles } from "@/contexts/FilesContext";
+import { useDocumentSet } from "@/contexts/DocumentSetProvider";
 
 export default function Header({
   menuOpen,
@@ -15,10 +15,11 @@ export default function Header({
   onDocumentSave,
   setDocumentID,
 }) {
-  const { fileMetaData, fileExists, renameFile, deleteFile } = useFiles();
+  const { docSetMetaData, documentExists, renameDocument, deleteDocument } =
+    useDocumentSet();
 
   const documentName =
-    fileMetaData.find((file) => file.id === documentID)?.name ?? null;
+    docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
 
   function renameCurrentDocument(newName) {
     if (newName === documentName) return false;
@@ -27,18 +28,18 @@ export default function Header({
       toast("Given file name cannot be empty.");
     }
 
-    if (fileExists(newName)) {
+    if (documentExists(newName)) {
       toast(`${newName} already exists.`);
       return false;
     }
 
-    renameFile(documentID, newName);
+    renameDocument(documentID, newName);
     toast(`${documentName} renamed to ${newName}.`);
     return true;
   }
 
   function deleteCurrentDocument() {
-    setDocumentID(deleteFile(documentID));
+    setDocumentID(deleteDocument(documentID));
     toast(`${documentName} deleted.`);
   }
 

@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles/index.css";
 import App from "./App.jsx";
-import { FilesProvider } from "./contexts/FilesContext.jsx";
+import { DocumentSetProvider } from "./contexts/DocumentSetProvider.jsx";
 import * as database from "./database";
 
 // Side effect import
@@ -14,8 +14,8 @@ if (database.isEmpty()) {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <FilesProvider>
+    <DocumentSetProvider>
       <App />
-    </FilesProvider>
+    </DocumentSetProvider>
   </StrictMode>,
 );
