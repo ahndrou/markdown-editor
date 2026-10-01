@@ -4,22 +4,20 @@ import { ShowPreviewIcon, HidePreviewIcon } from "./SVGComponents.jsx";
 import { getMarkdownFile } from "@/utils/localStorageUtils";
 
 export default function Main({
-  currentFileName,
+  documentID,
   docHasUnsavedChanges,
   markdownRef,
 }) {
   const [editorOpen, setEditorOpen] = useState(true);
 
   const [markdown, setMarkdown] = useState(
-    () => getMarkdownFile(currentFileName).content,
+    () => getMarkdownFile(documentID).content,
   );
 
   useEffect(() => {
-    setMarkdown(
-      JSON.parse(localStorage.getItem(currentFileName))?.content ?? null,
-    );
+    setMarkdown(JSON.parse(localStorage.getItem(documentID))?.content ?? null);
     docHasUnsavedChanges.current = false;
-  }, [currentFileName]);
+  }, [documentID]);
 
   useEffect(() => {
     markdownRef.current = markdown;

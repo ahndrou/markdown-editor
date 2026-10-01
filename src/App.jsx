@@ -12,6 +12,7 @@ import * as database from "./database";
 
 function App() {
   const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
+
   const {
     docSetMetaData,
     renameDocument,
@@ -80,7 +81,7 @@ function App() {
 
       <div className="col-start-2 row-start-2">
         <Main
-          currentFileName={documentID}
+          documentID={documentID}
           docHasUnsavedChanges={docHasUnsavedChanges}
           markdownRef={markdownRef}
         />
