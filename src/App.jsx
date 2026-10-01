@@ -1,15 +1,40 @@
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
+import { useDocumentSet } from "./contexts/DocumentSetProvider";
 
 import * as database from "./database";
 
 function App() {
   const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
+  const { docSetMetaData, renameDocument, deleteDocument } = useDocumentSet();
+
+  const documentName =
+    docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
+
+  function renameCurrentDocument(newName) {
+    const result = renameDocument(documentID, newName);
+
+    if (result.ok) {
+      toast(`${result.oldName} renamed to ${newName}.`);
+    } else if (result.reason === "empty") {
+      toast("Given file name cannot be empty.");
+    } else if (result.reason === "duplicate") {
+      toast(`${newName} already exists.`);
+    }
+
+    return result.ok;
+  }
+
+  function deleteCurrentDocument() {
+    setDocumentID(deleteDocument(documentID));
+    toast(`${documentName} deleted.`);
+  }
 
   const docHasUnsavedChanges = useRef(false);
   const markdownRef = useRef(null);
@@ -42,10 +67,11 @@ function App() {
       <div className="col-start-2 row-start-1">
         <Header
           menuOpen={menuOpen}
-          documentID={documentID}
+          documentName={documentName}
           onMenuOpenChange={() => setMenuOpen((open) => !open)}
           onDocumentSave={saveDocumentEdits}
-          setDocumentID={setDocumentID}
+          onRename={renameCurrentDocument}
+          onDelete={deleteCurrentDocument}
         />
       </div>
 

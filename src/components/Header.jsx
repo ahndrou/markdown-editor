@@ -6,39 +6,15 @@ import saveImg from "../assets/icon-save.svg";
 import { toast } from "sonner";
 
 import DeleteButton from "./DeleteButton";
-import { useDocumentSet } from "@/contexts/DocumentSetProvider";
 
 export default function Header({
   menuOpen,
-  documentID,
+  documentName,
   onMenuOpenChange,
   onDocumentSave,
-  setDocumentID,
+  onRename,
+  onDelete,
 }) {
-  const { docSetMetaData, renameDocument, deleteDocument } = useDocumentSet();
-
-  const documentName =
-    docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
-
-  function renameCurrentDocument(newName) {
-    const result = renameDocument(documentID, newName);
-
-    if (result.ok) {
-      toast(`${result.oldName} renamed to ${newName}.`);
-    } else if (result.reason === "empty") {
-      toast("Given file name cannot be empty.");
-    } else if (result.reason === "duplicate") {
-      toast(`${newName} already exists.`);
-    }
-
-    return result.ok;
-  }
-
-  function deleteCurrentDocument() {
-    setDocumentID(deleteDocument(documentID));
-    toast(`${documentName} deleted.`);
-  }
-
   return (
     <header className="bg-800 text-100 flex h-[4rem] items-center">
       <button
@@ -79,7 +55,7 @@ export default function Header({
               defaultValue={documentName}
               key={documentName} // Ensures the input updates when the markdown file changes.
               onBlur={(e) => {
-                if (!renameCurrentDocument(e.target.value)) {
+                if (!onRename(e.target.value)) {
                   e.target.value = documentName;
                 }
               }}
@@ -87,7 +63,7 @@ export default function Header({
           </div>
 
           <DeleteButton
-            deleteCurrentFile={deleteCurrentDocument}
+            deleteCurrentFile={onDelete}
             currentFileName={documentName}
           />
 
