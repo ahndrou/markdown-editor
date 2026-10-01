@@ -94,6 +94,11 @@ export function deleteDocument(documentID) {
   localStorage.removeItem(documentID);
 }
 
+export function modifyDocumentContent(documentID, newContent) {
+  const modifiedDoc = (getDocument(documentID).content = newContent);
+  localStorage.setItem(documentID, JSON.stringify(modifiedDoc));
+}
+
 function addDocument(documentObj) {
   const id = createID();
   localStorage.setItem(id, JSON.stringify(documentObj));

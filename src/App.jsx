@@ -12,7 +12,12 @@ import * as database from "./database";
 
 function App() {
   const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
-  const { docSetMetaData, renameDocument, deleteDocument } = useDocumentSet();
+  const {
+    docSetMetaData,
+    renameDocument,
+    deleteDocument,
+    modifyDocumentContent,
+  } = useDocumentSet();
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -40,9 +45,7 @@ function App() {
   const markdownRef = useRef(null);
 
   function saveDocumentEdits() {
-    const item = JSON.parse(localStorage.getItem(documentID));
-    item.content = markdownRef.current;
-    localStorage.setItem(documentID, JSON.stringify(item));
+    modifyDocumentContent(documentID, markdownRef.current);
     docHasUnsavedChanges.current = false;
   }
 
