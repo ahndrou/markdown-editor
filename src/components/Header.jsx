@@ -9,16 +9,19 @@ import DeleteButton from "./DeleteButton";
 import { useFiles } from "@/contexts/FilesContext";
 
 export default function Header({
-  setMenuOpen,
   menuOpen,
-  saveCurrentMarkdown,
-  currentFileName,
-  setCurrentFileName,
+  documentID,
+  onMenuOpenChange,
+  onDocumentSave,
+  setDocumentID,
 }) {
-  const { fileExists, renameFile, deleteFile } = useFiles();
+  const { fileMetaData, fileExists, renameFile, deleteFile } = useFiles();
+
+  const documentName =
+    fileMetaData.find((file) => file.id === documentID)?.name ?? null;
 
   function renameCurrentDocument(newName) {
-    if (newName === currentFileName) return false;
+    if (newName === documentName) return false;
 
     if (newName === "") {
       toast("Given file name cannot be empty.");
@@ -29,22 +32,21 @@ export default function Header({
       return false;
     }
 
-    renameFile(currentFileName, newName);
-    setCurrentFileName(newName);
-    toast(`${currentFileName} renamed to ${newName}.`);
+    renameFile(documentID, newName);
+    toast(`${documentName} renamed to ${newName}.`);
     return true;
   }
 
   function deleteCurrentDocument() {
-    setCurrentFileName(deleteFile(currentFileName));
-    toast(`${currentFileName} deleted.`);
+    setDocumentID(deleteFile(documentID));
+    toast(`${documentName} deleted.`);
   }
 
   return (
     <header className="bg-800 text-100 flex h-[4rem] items-center">
       <button
         className="bg-700 hover:bg-orange me-6 h-full flex-[0_0_4rem] cursor-pointer"
-        onClick={() => setMenuOpen((currentValue) => !currentValue)}
+        onClick={onMenuOpenChange}
       >
         <img
           className="mx-auto"
@@ -53,12 +55,12 @@ export default function Header({
       </button>
 
       <img
-        className={`me-4 hidden border-600 py-3 pe-4 lg:block ${currentFileName !== null ? "border-e-2" : ""}`}
+        className={`me-4 hidden border-600 py-3 pe-4 lg:block ${documentName !== null ? "border-e-2" : ""}`}
         alt="Product logo"
         src={logo}
       />
 
-      {currentFileName !== null && (
+      {documentName !== null && (
         <>
           <div className="me-auto grid grid-cols-[auto_1fr] items-center lg:basis-[20rem]">
             <img
@@ -77,11 +79,11 @@ export default function Header({
               id="docName"
               type="text"
               className="text-heading-m caret-orange min-w-0 border-b-1 border-transparent overflow-ellipsis focus:border-100 focus:outline-0"
-              defaultValue={currentFileName}
-              key={currentFileName} // Ensures the input updates when the markdown file changes.
+              defaultValue={documentName}
+              key={documentName} // Ensures the input updates when the markdown file changes.
               onBlur={(e) => {
                 if (!renameCurrentDocument(e.target.value)) {
-                  e.target.value = currentFileName;
+                  e.target.value = documentName;
                 }
               }}
             />
@@ -89,14 +91,14 @@ export default function Header({
 
           <DeleteButton
             deleteCurrentFile={deleteCurrentDocument}
-            currentFileName={currentFileName}
+            currentFileName={documentName}
           />
 
           <button
             className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
             onClick={() => {
-              saveCurrentMarkdown();
-              toast(`${currentFileName} saved successfully.`);
+              onDocumentSave();
+              toast(`${documentName} saved successfully.`);
             }}
           >
             <span className="text-heading-m order-2 hidden lg:block">

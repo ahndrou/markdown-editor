@@ -41,11 +41,11 @@ function App() {
 
       <div className="col-start-2 row-start-1">
         <Header
-          setMenuOpen={setMenuOpen}
           menuOpen={menuOpen}
-          saveCurrentMarkdown={saveDocumentEdits}
-          currentFileName={documentID}
-          setCurrentFileName={setDocumentID}
+          documentID={documentID}
+          onMenuOpenChange={() => setMenuOpen((open) => !open)}
+          onDocumentSave={saveDocumentEdits}
+          setDocumentID={setDocumentID}
         />
       </div>
 

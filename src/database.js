@@ -15,6 +15,7 @@ const PREFIX = "DB:";
 /**
  * Adds a new, empty document to the database.
  * @param name Name to be given to the new document.
+ * @returns ID of the new document.
  */
 export function addNewDocument(name) {
   const newDocument = {
@@ -23,7 +24,7 @@ export function addNewDocument(name) {
     content: "# New Document",
   };
 
-  addDocument(newDocument);
+  return addDocument(newDocument);
 }
 
 /**
@@ -61,8 +62,39 @@ export function getDocument(documentID) {
   return JSON.parse(localStorage.getItem(documentID));
 }
 
+/**
+ * @returns Array of { id, name, createdAt } for all database entries.
+ */
+export function getAllMetaData() {
+  return getIDArray().map((id) => {
+    const { name, createdAt } = getDocument(id);
+    return { id, name, createdAt };
+  });
+}
+
+/**
+ * Changes the name of a document. Its ID is unaffected.
+ * @param documentID ID of the document to rename.
+ * @param newName New name for the document.
+ */
+export function renameDocument(documentID, newName) {
+  const document = getDocument(documentID);
+  document.name = newName;
+  localStorage.setItem(documentID, JSON.stringify(document));
+}
+
+/**
+ * Removes a document from the database.
+ * @param documentID ID of the document to delete.
+ */
+export function deleteDocument(documentID) {
+  localStorage.removeItem(documentID);
+}
+
 function addDocument(documentObj) {
-  localStorage.setItem(createID(), JSON.stringify(documentObj));
+  const id = createID();
+  localStorage.setItem(id, JSON.stringify(documentObj));
+  return id;
 }
 
 function createID() {

@@ -33,13 +33,13 @@ export default function Menu({
 
       <ul className="grid w-max gap-2">
         {fileMetaData.map((mdObj) => (
-          <li key={mdObj.name}>
+          <li key={mdObj.id}>
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
                 if (docHasUnsavedChanges.current)
-                  setPendingFileChange(mdObj.name);
-                else onDocumentChange(mdObj.name);
+                  setPendingFileChange(mdObj.id);
+                else onDocumentChange(mdObj.id);
               }}
             >
               <img className="row-span-2" src={fileIcon} />

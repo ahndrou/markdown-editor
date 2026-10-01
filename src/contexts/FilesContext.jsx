@@ -1,7 +1,12 @@
 import { createContext, useContext, useState } from "react";
 
-import { getAllStoredFileMetaData } from "@/utils/localStorageUtils";
-import { getCurrentDate } from "@/utils/generalUtils";
+import * as database from "@/database";
+
+/**
+ * This module should act as an interface to the document database.
+ *
+ * It should abstract from the implementation of the database.
+ */
 
 const FilesContext = createContext(null);
 
@@ -11,7 +16,7 @@ export function useFiles() {
 
 export function FilesProvider({ children }) {
   const [fileMetaData, setFileMetaData] = useState(() =>
-    getAllStoredFileMetaData(),
+    database.getAllMetaData(),
   );
 
   function fileExists(name) {
@@ -19,7 +24,7 @@ export function FilesProvider({ children }) {
   }
 
   function createFile() {
-    const NEW_DOC_BASE_NAME = "DB:document";
+    const NEW_DOC_BASE_NAME = "document";
     let newFileNum = 1;
     let newFileName = `${NEW_DOC_BASE_NAME}.md`;
 
@@ -28,41 +33,31 @@ export function FilesProvider({ children }) {
       newFileNum++;
     }
 
-    const createdAtDate = getCurrentDate();
+    const id = database.addNewDocument(newFileName);
+    const { createdAt } = database.getDocument(id);
 
     setFileMetaData((state) => [
       ...state,
-      { name: newFileName, createdAt: createdAtDate },
+      { id, name: newFileName, createdAt },
     ]);
-
-    const document = {
-      createdAt: createdAtDate,
-      content: "# New file.",
-    };
-
-    localStorage.setItem(newFileName, JSON.stringify(document));
   }
 
-  function renameFile(oldName, newName) {
-    const item = localStorage.getItem(oldName);
-    localStorage.setItem(newName, item);
-    localStorage.removeItem(oldName);
+  function renameFile(id, newName) {
+    database.renameDocument(id, newName);
 
     setFileMetaData((state) =>
-      state.map((file) =>
-        file.name === oldName ? { ...file, name: newName } : file,
-      ),
+      state.map((file) => (file.id === id ? { ...file, name: newName } : file)),
     );
   }
 
-  // Returns the name of the file to open next, or null if none remain.
-  function deleteFile(name) {
-    localStorage.removeItem(name);
+  // Returns the ID of the file to open next, or null if none remain.
+  function deleteFile(id) {
+    database.deleteDocument(id);
 
-    const remaining = fileMetaData.filter((file) => file.name !== name);
+    const remaining = fileMetaData.filter((file) => file.id !== id);
     setFileMetaData(remaining);
 
-    return remaining[0]?.name ?? null;
+    return remaining[0]?.id ?? null;
   }
 
   return (
