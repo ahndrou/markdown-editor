@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import useStoredState from "../../hooks/useStoredState";
+import usePersistedState from "../../hooks/usePersistedState";
 import { DarkModeIcon, LightModeIcon } from "../SVGComponents";
 import { Switch } from "./switch";
 
 export default function ThemeSwitch({ className }) {
-  const [theme, setTheme] = useStoredState("theme", "light");
+  const [theme, setTheme] = usePersistedState("theme", "light");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
