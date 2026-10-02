@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import Header from "./components/Header";
@@ -8,30 +8,29 @@ import { Toaster } from "./components/ui/sonner";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
 import { useDocumentSet } from "./contexts/DocumentSetProvider";
 
-import * as database from "./database";
-import { getMarkdownFile } from "./utils/localStorageUtils";
-
 function App() {
-  const [documentID, setDocumentID] = useState(() => database.getIDArray()[0]);
-
   const {
     docSetMetaData,
     renameDocument,
     deleteDocument,
     modifyDocumentContent,
+    getDocumentContent,
   } = useDocumentSet();
 
-  const [contentDraft, setContentDraft] = useState(
-    () => getMarkdownFile(documentID).content,
+  const [documentID, setDocumentID] = useState(
+    () => docSetMetaData[0]?.id ?? null,
+  );
+
+  const [contentDraft, setContentDraft] = useState(() =>
+    getDocumentContent(documentID),
   );
 
   useEffect(
-    () => setContentDraft(getMarkdownFile(documentID).content),
+    () => setContentDraft(getDocumentContent(documentID)),
     [documentID],
   );
 
-  const hasUnsavedChanges =
-    contentDraft !== getMarkdownFile(documentID).content;
+  const hasUnsavedChanges = contentDraft !== getDocumentContent(documentID);
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -56,7 +55,7 @@ function App() {
   }
 
   function saveDocumentEdits() {
-    modifyDocumentContent(documentID, markdownRef.current);
+    modifyDocumentContent(documentID, contentDraft);
   }
 
   const [menuOpen, setMenuOpen] = useState(false);

@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-  retrieveFromLocalStorage,
-  saveToLocalStorage,
-} from "../utils/localStorageUtils";
 
 export default function useStoredState(key, fallback) {
-  const storedState = retrieveFromLocalStorage(key);
+  const storedState = localStorage.getItem(key);
 
-  const [state, setState] = useState(storedState ? storedState : fallback);
+  const [state, setState] = useState(() =>
+    storedState !== null ? storedState : fallback,
+  );
 
   useEffect(() => {
-    saveToLocalStorage(key, state);
+    localStorage.setItem(key, state);
   }, [key, state]);
 
   return [state, setState];

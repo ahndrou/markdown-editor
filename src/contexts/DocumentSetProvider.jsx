@@ -80,6 +80,10 @@ export function DocumentSetProvider({ children }) {
     database.modifyDocumentContent(id, newContent);
   }
 
+  function getDocumentContent(id) {
+    return database.getDocument(id).content;
+  }
+
   return (
     <DocumentSetContext.Provider
       value={{
@@ -88,6 +92,7 @@ export function DocumentSetProvider({ children }) {
         renameDocument,
         deleteDocument,
         modifyDocumentContent,
+        getDocumentContent,
       }}
     >
       {children}
