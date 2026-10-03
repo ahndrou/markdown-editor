@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import Header from "./components/Header";
@@ -6,37 +6,23 @@ import Menu from "./components/Menu";
 import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
-import { useDocumentSet } from "./contexts/DocumentSetProvider";
+import useCurrentDocument from "./hooks/useCurrentDocument";
 
 function App() {
   const {
-    docSetMetaData,
-    renameDocument,
-    deleteDocument,
-    modifyDocumentContent,
-    getDocumentContent,
-  } = useDocumentSet();
-
-  const [documentID, setDocumentID] = useState(
-    () => docSetMetaData[0]?.id ?? null,
-  );
-
-  const [contentDraft, setContentDraft] = useState(() =>
-    getDocumentContent(documentID),
-  );
-
-  useEffect(
-    () => setContentDraft(getDocumentContent(documentID)),
-    [documentID],
-  );
-
-  const hasUnsavedChanges = contentDraft !== getDocumentContent(documentID);
-
-  const documentName =
-    docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
+    documentID,
+    documentName,
+    renameCurrentDocument: baseRename,
+    deleteCurrentDocument: baseDelete,
+    contentDraft,
+    hasUnsavedEdits,
+    changeDocument,
+    saveCurrentDocumentEdits,
+    setContentDraft,
+  } = useCurrentDocument();
 
   function renameCurrentDocument(newName) {
-    const result = renameDocument(documentID, newName);
+    const result = baseRename(newName);
 
     if (result.ok) {
       toast(`${result.oldName} renamed to ${newName}.`);
@@ -50,12 +36,8 @@ function App() {
   }
 
   function deleteCurrentDocument() {
-    setDocumentID(deleteDocument(documentID));
+    baseDelete();
     toast(`${documentName} deleted.`);
-  }
-
-  function saveDocumentEdits() {
-    modifyDocumentContent(documentID, contentDraft);
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -69,9 +51,9 @@ function App() {
         className={`bg-900 col-start-1 row-span-2 row-start-1 overflow-hidden ${menuOpen ? "px-6" : ""}`}
       >
         <Menu
-          onDocumentChange={setDocumentID}
-          onDocumentSave={saveDocumentEdits}
-          docHasUnsavedChanges={hasUnsavedChanges}
+          onDocumentChange={changeDocument}
+          onDocumentSave={saveCurrentDocumentEdits}
+          docHasUnsavedChanges={hasUnsavedEdits}
         />
         <ThemeSwitch className={"justify-self-center"} />
       </div>
@@ -81,7 +63,7 @@ function App() {
           menuOpen={menuOpen}
           documentName={documentName}
           onMenuOpenChange={() => setMenuOpen((open) => !open)}
-          onDocumentSave={saveDocumentEdits}
+          onDocumentSave={saveCurrentDocumentEdits}
           onRename={renameCurrentDocument}
           onDelete={deleteCurrentDocument}
         />
