@@ -95,7 +95,8 @@ export function deleteDocument(documentID) {
 }
 
 export function modifyDocumentContent(documentID, newContent) {
-  const modifiedDoc = (getDocument(documentID).content = newContent);
+  const modifiedDoc = getDocument(documentID);
+  modifiedDoc.content = newContent;
   localStorage.setItem(documentID, JSON.stringify(modifiedDoc));
 }
 
