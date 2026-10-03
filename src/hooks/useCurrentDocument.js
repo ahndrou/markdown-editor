@@ -53,6 +53,7 @@ export default function useCurrentDocument(initialID) {
 
   function saveCurrentDocumentEdits() {
     modifyDocumentContent(documentID, contentDraft);
+    savedContent = getDocumentContent(documentID);
   }
 
   return {
