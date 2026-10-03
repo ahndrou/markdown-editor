@@ -37,8 +37,7 @@ export default function Menu({
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
-                if (docHasUnsavedChanges.current)
-                  setPendingFileChange(mdObj.id);
+                if (docHasUnsavedChanges) setPendingFileChange(mdObj.id);
                 else onDocumentChange(mdObj.id);
               }}
             >
