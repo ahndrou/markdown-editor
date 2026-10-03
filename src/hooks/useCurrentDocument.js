@@ -25,9 +25,10 @@ export default function useCurrentDocument(initialID) {
   const [contentDraft, setContentDraft] = useState(() =>
     getDocumentContent(documentID),
   );
-  const savedContent = useRef(() => getDocumentContent(documentID));
 
-  const hasUnsavedEdits = contentDraft !== savedContent.current;
+  const savedContent = getDocumentContent(documentID);
+
+  const hasUnsavedEdits = contentDraft !== savedContent;
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -36,7 +37,6 @@ export default function useCurrentDocument(initialID) {
     setDocumentID(documentID);
     const content = getDocumentContent(documentID);
     setContentDraft(content);
-    savedContent.current = content;
   }
 
   function renameCurrentDocument(newName) {
