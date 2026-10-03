@@ -42,7 +42,7 @@ export default function useCurrentDocument(initialID) {
   function renameCurrentDocument(newName) {
     const result = renameDocument(documentID, newName);
 
-    return result.ok;
+    return result;
   }
 
   function deleteCurrentDocument() {
