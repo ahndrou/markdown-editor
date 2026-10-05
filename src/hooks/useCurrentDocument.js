@@ -23,10 +23,10 @@ export default function useCurrentDocument(initialID) {
 
   const [documentID, setDocumentID] = useState(initialID);
   const [contentDraft, setContentDraft] = useState(() =>
-    getDocumentContent(documentID),
+    loadContent(documentID),
   );
 
-  const savedContent = useRef(getDocumentContent(documentID));
+  const savedContent = useRef(loadContent(documentID));
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -43,7 +43,7 @@ export default function useCurrentDocument(initialID) {
       if (unsavedEdits === "save") saveCurrentDocumentEdits();
     }
 
-    const content = getDocumentContent(documentID);
+    const content = loadContent(documentID);
     setDocumentID(documentID);
     setContentDraft(content);
     savedContent.current = content;
@@ -71,10 +71,15 @@ export default function useCurrentDocument(initialID) {
     return contentDraft !== savedContent.current;
   }
 
+  function loadContent(documentID) {
+    return documentID === null ? "" : getDocumentContent(documentID);
+  }
+
   return {
     documentID,
     documentName,
     contentDraft,
+    loadContent,
     hasUnsavedEdits,
     changeDocument,
     deleteCurrentDocument,
