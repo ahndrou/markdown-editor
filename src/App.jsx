@@ -15,7 +15,6 @@ function App() {
     renameCurrentDocument: baseRename,
     deleteCurrentDocument: baseDelete,
     contentDraft,
-    hasUnsavedEdits,
     changeDocument,
     saveCurrentDocumentEdits,
     setContentDraft,

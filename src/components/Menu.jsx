@@ -10,11 +10,7 @@ import {
 import { useState } from "react";
 import { useDocumentSet } from "@/contexts/DocumentSetProvider";
 
-export default function Menu({
-  onDocumentChange,
-  onDocumentSave,
-  docHasUnsavedChanges,
-}) {
+export default function Menu({ onDocumentChange }) {
   const { docSetMetaData, createDocument } = useDocumentSet();
   const [pendingFileChange, setPendingFileChange] = useState(null);
 
