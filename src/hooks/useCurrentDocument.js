@@ -26,17 +26,28 @@ export default function useCurrentDocument(initialID) {
     getDocumentContent(documentID),
   );
 
-  const savedContent = getDocumentContent(documentID);
-
-  const hasUnsavedEdits = contentDraft !== savedContent;
+  const savedContent = useRef(getDocumentContent(documentID));
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
 
-  function changeDocument(documentID) {
-    setDocumentID(documentID);
+  /**
+   *
+   * @param {*} documentID Document ID to change to.
+   * @param param1 Options object for defining how unsaved edits should be handled.
+   * @returns Success description object.
+   */
+  function changeDocument(documentID, { unsavedEdits = "block" } = {}) {
+    if (hasUnsavedEdits()) {
+      if (unsavedEdits === "block") return { ok: false, reason: "unsaved" };
+      if (unsavedEdits === "save") saveCurrentDocumentEdits();
+    }
+
     const content = getDocumentContent(documentID);
+    setDocumentID(documentID);
     setContentDraft(content);
+    savedContent.current = content;
+    return { ok: true };
   }
 
   function renameCurrentDocument(newName) {
@@ -53,7 +64,11 @@ export default function useCurrentDocument(initialID) {
 
   function saveCurrentDocumentEdits() {
     modifyDocumentContent(documentID, contentDraft);
-    savedContent = getDocumentContent(documentID);
+    savedContent.current = getDocumentContent(documentID);
+  }
+
+  function hasUnsavedEdits() {
+    return contentDraft !== savedContent.current;
   }
 
   return {

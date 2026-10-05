@@ -50,11 +50,7 @@ function App() {
       <div
         className={`bg-900 col-start-1 row-span-2 row-start-1 overflow-hidden ${menuOpen ? "px-6" : ""}`}
       >
-        <Menu
-          onDocumentChange={changeDocument}
-          onDocumentSave={saveCurrentDocumentEdits}
-          docHasUnsavedChanges={hasUnsavedEdits}
-        />
+        <Menu onDocumentChange={changeDocument} />
         <ThemeSwitch className={"justify-self-center"} />
       </div>
 

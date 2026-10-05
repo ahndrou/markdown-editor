@@ -37,8 +37,8 @@ export default function Menu({
             <button
               className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
               onClick={() => {
-                if (docHasUnsavedChanges) setPendingFileChange(mdObj.id);
-                else onDocumentChange(mdObj.id);
+                const result = onDocumentChange(mdObj.id);
+                if (result.reason === "unsaved") setPendingFileChange(mdObj.id);
               }}
             >
               <img className="row-span-2" src={fileIcon} />
@@ -70,8 +70,7 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  onDocumentChange(pendingFileChange);
-                  onDocumentSave();
+                  onDocumentChange(pendingFileChange, { unsavedEdits: "save" });
                   setPendingFileChange(null);
                 }}
               >
@@ -82,7 +81,9 @@ export default function Menu({
               <button
                 className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover mb-2 w-full cursor-pointer rounded-md py-2"
                 onClick={() => {
-                  onDocumentChange(pendingFileChange);
+                  onDocumentChange(pendingFileChange, {
+                    unsavedEdits: "discard",
+                  });
                   setPendingFileChange(null);
                 }}
               >
