@@ -26,7 +26,9 @@ export default function useCurrentDocument(initialID) {
     loadContent(documentID),
   );
 
-  const savedContent = useRef(loadContent(documentID));
+  // useRef assigns its current value as the argument only on the first
+  // render. This way prevents reading the database on every render.
+  const lastSavedContent = useRef(contentDraft);
 
   const documentName =
     docSetMetaData.find((doc) => doc.id === documentID)?.name ?? null;
@@ -46,7 +48,7 @@ export default function useCurrentDocument(initialID) {
     const content = loadContent(documentID);
     setDocumentID(documentID);
     setContentDraft(content);
-    savedContent.current = content;
+    lastSavedContent.current = content;
     return { ok: true };
   }
 
@@ -65,11 +67,11 @@ export default function useCurrentDocument(initialID) {
 
   function saveCurrentDocumentEdits() {
     modifyDocumentContent(documentID, contentDraft);
-    savedContent.current = getDocumentContent(documentID);
+    lastSavedContent.current = getDocumentContent(documentID);
   }
 
   function hasUnsavedEdits() {
-    return contentDraft !== savedContent.current;
+    return contentDraft !== lastSavedContent.current;
   }
 
   function loadContent(documentID) {
