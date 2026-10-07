@@ -2,7 +2,7 @@ import logo from "../assets/logo.svg";
 
 export default function Header({ start, title, actions }) {
   return (
-    <header className="bg-800 text-100 flex h-[4rem] items-center gap-4">
+    <header className="bg-800 text-100 flex h-[4rem] items-center gap-4 pe-3">
       {start}
 
       <img
