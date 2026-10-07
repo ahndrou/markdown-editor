@@ -18,9 +18,9 @@ function App() {
     documentName,
     renameCurrentDocument: baseRename,
     deleteCurrentDocument: baseDelete,
+    saveCurrentDocumentEdits: baseSave,
     contentDraft,
     changeDocument,
-    saveCurrentDocumentEdits,
     setContentDraft,
   } = useCurrentDocument();
 
@@ -41,6 +41,11 @@ function App() {
   function deleteCurrentDocument() {
     baseDelete();
     toast(`${documentName} deleted.`);
+  }
+
+  function saveCurrentDocument() {
+    baseSave();
+    toast(`${documentName} saved successfully.`);
   }
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,10 +85,7 @@ function App() {
                   deleteCurrentFile={deleteCurrentDocument}
                   currentFileName={documentName}
                 />
-                <SaveButton
-                  documentName={documentName}
-                  onSave={saveCurrentDocumentEdits}
-                />
+                <SaveButton onSave={saveCurrentDocument} />
               </>
             )
           }

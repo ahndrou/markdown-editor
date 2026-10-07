@@ -1,15 +1,10 @@
 import saveImg from "../assets/icon-save.svg";
 
-import { toast } from "sonner";
-
-export default function SaveButton({ documentName, onSave }) {
+export default function SaveButton({ onSave }) {
   return (
     <button
       className={`bg-orange hover:bg-orange-hover me-3 flex cursor-pointer items-center gap-2 rounded-lg p-2 px-4`}
-      onClick={() => {
-        onSave();
-        toast(`${documentName} saved successfully.`);
-      }}
+      onClick={onSave}
     >
       <span className="text-heading-m order-2 hidden lg:block">
         Save Changes
