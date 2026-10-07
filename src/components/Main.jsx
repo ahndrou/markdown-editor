@@ -45,9 +45,9 @@ export default function Main({ empty, content, onContentEdit }) {
         onClick={() => setEditorOpen(!editorOpen)}
       >
         {editorOpen ? (
-          <HidePreviewIcon className="fill-text-secondary group-hover:fill-orange" />
-        ) : (
           <ShowPreviewIcon className="fill-text-secondary group-hover:fill-orange" />
+        ) : (
+          <HidePreviewIcon className="fill-text-secondary group-hover:fill-orange" />
         )}
       </button>
     </main>
