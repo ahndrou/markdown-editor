@@ -58,6 +58,7 @@ export default function useCurrentDocument(initialID) {
 
   function deleteCurrentDocument() {
     const nextID = deleteDocument(documentID);
+    setDocumentID(nextID);
 
     return nextID;
   }

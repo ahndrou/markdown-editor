@@ -26,7 +26,7 @@ export default function DeleteButton({ deleteCurrentFile, currentFileName }) {
           Are you sure you want to delete the '{currentFileName}' document and
           its contents? This action cannot be reversed.
         </DialogDescription>
-        <DialogClose>
+        <DialogClose asChild>
           <button
             className="bg-orange font-roboto-reg text-100 hover:bg-orange-hover w-full cursor-pointer rounded-md py-2"
             onClick={deleteCurrentFile}
