@@ -16,10 +16,10 @@ export default function Main({ empty, content, onContentEdit }) {
     </main>
   ) : (
     <main
-      className={`grid h-full ${editorOpen ? "grid-cols-2" : "grid-cols-1"} grid-rows-[auto_1fr]`}
+      className={`grid h-full grid-cols-1 ${editorOpen ? "md:grid-cols-2" : ""} grid-rows-[auto_1fr]`}
     >
       {editorOpen && (
-        <section className="bg-background border-border row-span-2 row-start-1 grid grid-rows-subgrid border-e">
+        <section className="bg-background border-border col-start-1 row-span-2 row-start-1 grid grid-rows-subgrid border-e">
           <h2 className="bg-background-header text-text-secondary text-heading-s row-start-1 p-4 uppercase">
             Markdown
           </h2>
@@ -31,7 +31,9 @@ export default function Main({ empty, content, onContentEdit }) {
         </section>
       )}
 
-      <section className="bg-background col-end-[-1] row-span-2 row-start-1 grid grid-rows-subgrid">
+      <section
+        className={`bg-background col-end-[-1] row-span-2 row-start-1 ${editorOpen ? "hidden md:grid" : "grid"} grid-rows-subgrid`}
+      >
         <h2 className="bg-background-header text-text-secondary text-heading-s row-start-1 p-4 uppercase">
           Preview
         </h2>
