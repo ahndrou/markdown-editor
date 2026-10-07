@@ -9,6 +9,7 @@ import {
 } from "./ui/dialog";
 import { useState } from "react";
 import { useDocumentSet } from "@/contexts/DocumentSetProvider";
+import { DocumentIcon } from "./SVGComponents";
 
 export default function Menu({ onDocumentChange }) {
   const { docSetMetaData, createDocument } = useDocumentSet();
@@ -27,21 +28,23 @@ export default function Menu({ onDocumentChange }) {
         + New Document
       </button>
 
-      <ul className="grid w-max gap-2">
+      <ul className="grid gap-3">
         {docSetMetaData.map((mdObj) => (
           <li key={mdObj.id}>
             <button
-              className="group grid cursor-pointer grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start gap-x-4"
+              className="group flex w-full cursor-pointer items-baseline-last gap-3"
               onClick={() => {
                 const result = onDocumentChange(mdObj.id);
                 if (result.reason === "unsaved") setPendingFileChange(mdObj.id);
               }}
             >
-              <img className="row-span-2" src={fileIcon} />
-              <span className="text-500 text-body">{mdObj.createdAt}</span>
-              <span className="text-heading-m group-hover:text-orange max-w-[10rem] overflow-hidden overflow-ellipsis whitespace-nowrap">
-                {mdObj.name}
-              </span>
+              <DocumentIcon className="group-hover:fill-orange h-[18px]" />
+              <div className="grid justify-items-start">
+                <span className="text-500 text-body">{mdObj.createdAt}</span>
+                <span className="text-heading-m group-hover:text-orange max-w-[10rem] overflow-hidden overflow-ellipsis whitespace-nowrap">
+                  {mdObj.name}
+                </span>
+              </div>
             </button>
           </li>
         ))}
