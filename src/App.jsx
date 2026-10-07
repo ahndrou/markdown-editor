@@ -7,6 +7,10 @@ import Main from "./components/Main";
 import { Toaster } from "./components/ui/sonner";
 import ThemeSwitch from "./components/ui/ThemeSwitch";
 import useCurrentDocument from "./hooks/useCurrentDocument";
+import MenuToggle from "./components/MenuToggle";
+import DocumentRenamer from "./components/DocumentRenamer";
+import DeleteButton from "./components/DeleteButton";
+import SaveButton from "./components/SaveButton";
 
 function App() {
   const {
@@ -55,12 +59,34 @@ function App() {
 
       <div className="col-start-2 row-start-1">
         <Header
-          menuOpen={menuOpen}
-          documentName={documentName}
-          onMenuOpenChange={() => setMenuOpen((open) => !open)}
-          onDocumentSave={saveCurrentDocumentEdits}
-          onRename={renameCurrentDocument}
-          onDelete={deleteCurrentDocument}
+          start={
+            <MenuToggle
+              menuOpen={menuOpen}
+              onMenuOpenChange={() => setMenuOpen((open) => !open)}
+            />
+          }
+          title={
+            documentID !== null && (
+              <DocumentRenamer
+                documentName={documentName}
+                onRename={renameCurrentDocument}
+              />
+            )
+          }
+          actions={
+            documentID !== null && (
+              <>
+                <DeleteButton
+                  deleteCurrentFile={deleteCurrentDocument}
+                  currentFileName={documentName}
+                />
+                <SaveButton
+                  documentName={documentName}
+                  onSave={saveCurrentDocumentEdits}
+                />
+              </>
+            )
+          }
         />
       </div>
 
